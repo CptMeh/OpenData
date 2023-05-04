@@ -1,0 +1,323 @@
+-------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  T:\Team\TREE allgemein\Output\Visualisierungen_Ergebnisse_und_Doku\IWI_Open_Da
+> ta_Vorlesung\2023\TREE2_Codebook_IWI_Open_Data_Vorlesung_2023.txt
+  log type:  text
+ opened on:   3 May 2023, 17:46:29
+
+. codebook
+
+-------------------------------------------------------------------------------------------
+resp_id                                                                 TREE2 respondent ID
+-------------------------------------------------------------------------------------------
+
+                  Type: Numeric (long)
+
+                 Range: [1011007,9013499]             Units: 1
+         Unique values: 8,429                     Missing .: 0/8,429
+
+                  Mean: 5.0e+06
+             Std. dev.: 2.6e+06
+
+           Percentiles:     10%       25%       50%       75%       90%
+                        1.0e+06   3.0e+06   5.0e+06   7.0e+06   9.0e+06
+
+-------------------------------------------------------------------------------------------
+aes_canton                                                                           Canton
+-------------------------------------------------------------------------------------------
+
+                  Type: Numeric (int)
+                 Label: aes_canton_lb
+
+                 Range: [1,26]                        Units: 1
+         Unique values: 26                        Missing .: 0/8,429
+
+              Examples: 3     Lucerne (LU)
+                        11    Solothurn (SO)
+                        17    St. Gallen (SG)
+                        22    Vaud (VD)
+
+-------------------------------------------------------------------------------------------
+aes_langreg                                                                 Language region
+-------------------------------------------------------------------------------------------
+
+                  Type: Numeric (long)
+                 Label: aes_langreg_lb
+
+                 Range: [1,3]                         Units: 1
+         Unique values: 3                         Missing .: 0/8,429
+
+            Tabulation: Freq.   Numeric  Label
+                        5,885         1  German
+                        2,081         2  French
+                          463         3  Italian
+
+-------------------------------------------------------------------------------------------
+t0sex                                                               Are you female or male?
+-------------------------------------------------------------------------------------------
+
+                  Type: Numeric (long)
+                 Label: t0sex_lb
+
+                 Range: [1,2]                         Units: 1
+         Unique values: 2                         Missing .: 0/8,429
+
+            Tabulation: Freq.   Numeric  Label
+                        4,592         1  Female
+                        3,837         2  Male
+
+-------------------------------------------------------------------------------------------
+t0fmedu_comp                            Parents' highest educational attainment [composite]
+-------------------------------------------------------------------------------------------
+
+                  Type: Numeric (long)
+                 Label: t0fmedu_comp_lb
+
+                 Range: [0,2]                         Units: 1
+         Unique values: 3                         Missing .: 191/8,429
+
+            Tabulation: Freq.   Numeric  Label
+                        1,150         0  Compulsory schooling only
+                        3,914         1  Upper secondary education
+                        3,174         2  Tertiary education
+                          191         .  
+
+-------------------------------------------------------------------------------------------
+t0immig                                                                  Immigration status
+-------------------------------------------------------------------------------------------
+
+                  Type: Numeric (int)
+                 Label: t0immig_lb
+
+                 Range: [1,3]                         Units: 1
+         Unique values: 3                         Missing .: 32/8,429
+
+            Tabulation: Freq.   Numeric  Label
+                        6,093         1  Native (at least 1 parent born
+                                         in Switzerland)
+                        1,541         2  Second generation (respondent
+                                         born in Switzerland, no parent
+                                         born in Switzerland)
+                          763         3  First generation (respondent
+                                         and parent(s) born abroad)
+                           32         .  
+
+-------------------------------------------------------------------------------------------
+t1bqvalids                                    Survey participation: base questionnaire (BQ)
+-------------------------------------------------------------------------------------------
+
+                  Type: Numeric (byte)
+                 Label: t1bqvalids_lb
+
+                 Range: [0,1]                         Units: 1
+         Unique values: 2                         Missing .: 0/8,429
+
+            Tabulation: Freq.   Numeric  Label
+                          458         0  No valid response
+                        7,971         1  Valid response
+
+-------------------------------------------------------------------------------------------
+t2bqvalids                                    Survey participation: base questionnaire (BQ)
+-------------------------------------------------------------------------------------------
+
+                  Type: Numeric (byte)
+                 Label: t2bqvalids_lb
+
+                 Range: [0,1]                         Units: 1
+         Unique values: 2                         Missing .: 0/8,429
+       Unique mv codes: 1                        Missing .*: 68/8,429
+
+            Tabulation: Freq.   Numeric  Label
+                        1,458         0  No valid response
+                        6,903         1  Valid response
+                           68        .e  not administered [wave]
+
+-------------------------------------------------------------------------------------------
+t3bqvalids                                    Survey participation: base questionnaire (BQ)
+-------------------------------------------------------------------------------------------
+
+                  Type: Numeric (byte)
+                 Label: t3bqvalids_lb
+
+                 Range: [0,1]                         Units: 1
+         Unique values: 2                         Missing .: 0/8,429
+       Unique mv codes: 1                        Missing .*: 277/8,429
+
+            Tabulation: Freq.   Numeric  Label
+                        1,998         0  No valid response
+                        6,154         1  Valid response
+                          277        .e  not administered [wave]
+
+-------------------------------------------------------------------------------------------
+t1wt                                                     Inverse probability weight: wave 1
+-------------------------------------------------------------------------------------------
+
+                  Type: Numeric (double)
+
+                 Range: [1.358e-09,68.436014]         Units: 1.000e-17
+         Unique values: 7,915                     Missing .: 458/8,429
+
+                  Mean: 9.78547
+             Std. dev.: 11.9607
+
+           Percentiles:     10%       25%       50%       75%       90%
+                        .287374    2.1438   5.90709   12.6203   22.8092
+
+-------------------------------------------------------------------------------------------
+t2wt                                                     Inverse probability weight: wave 2
+-------------------------------------------------------------------------------------------
+
+                  Type: Numeric (double)
+
+                 Range: [.07347786,78.753576]         Units: 1.000e-10
+         Unique values: 6,847                     Missing .: 1,526/8,429
+
+                  Mean: 11.2994
+             Std. dev.: 13.5453
+
+           Percentiles:     10%       25%       50%       75%       90%
+                        1.40676   3.13681   6.69639   13.8938   26.2733
+
+-------------------------------------------------------------------------------------------
+t3wt                                                     Inverse probability weight: wave 3
+-------------------------------------------------------------------------------------------
+
+                  Type: Numeric (double)
+
+                 Range: [.19057365,94.631998]         Units: 1.000e-10
+         Unique values: 6,101                     Missing .: 2,275/8,429
+
+                  Mean: 12.6747
+             Std. dev.: 15.6964
+
+           Percentiles:     10%       25%       50%       75%       90%
+                        1.53346   3.41583     7.375   15.4995   29.4282
+
+-------------------------------------------------------------------------------------------
+t0hisei08_3q                                  Parental socioeconomic status level (tercile)
+-------------------------------------------------------------------------------------------
+
+                  Type: Numeric (byte)
+                 Label: t0hisei08_3q_lb
+
+                 Range: [1,3]                         Units: 1
+         Unique values: 3                         Missing .: 162/8,429
+
+            Tabulation: Freq.   Numeric  Label
+                        3,173         1  Low
+                        2,714         2  Medium
+                        2,380         3  High
+                          162         .  
+
+-------------------------------------------------------------------------------------------
+t0wlem_3q                                                        Math score level (tercile)
+-------------------------------------------------------------------------------------------
+
+                  Type: Numeric (byte)
+                 Label: t0hisei08_3q_lb
+
+                 Range: [1,3]                         Units: 1
+         Unique values: 3                         Missing .: 89/8,429
+
+            Tabulation: Freq.   Numeric  Label
+                        3,093         1  Low
+                        2,751         2  Medium
+                        2,496         3  High
+                           89         .  
+
+-------------------------------------------------------------------------------------------
+t0st_nprog_req3                                    National school programme (requirements)
+-------------------------------------------------------------------------------------------
+
+                  Type: Numeric (long)
+                 Label: l_t0st_nprog_req3
+
+                 Range: [1,3]                         Units: 1
+         Unique values: 3                         Missing .: 0/8,429
+
+            Tabulation: Freq.   Numeric  Label
+                        2,419         1  High requirements
+                        3,470         2  Advanced requirements &
+                                         Alternative/non-assignable
+                                         study programme
+                        2,540         3  Basic/low requirements
+
+-------------------------------------------------------------------------------------------
+t1educ_class_1_r                                                         Educational status
+-------------------------------------------------------------------------------------------
+
+                  Type: Numeric (int)
+                 Label: t1educ_class_1_r_det5_lb
+
+                 Range: [1,9]                         Units: 1
+         Unique values: 9                         Missing .: 458/8,429
+
+            Tabulation: Freq.   Numeric  Label
+                          378         1  NET
+                          256         2  Internship
+                          651         3  10th school year
+                          364         4  Other intermediate solution
+                          155         5  2 years VET
+                        3,032         6  3-4 years VET
+                          693         7  Vocational baccalaureate //VET
+                        2,010         8  General baccalaureate
+                          432         9  Other general education
+                                         programme (specialized middle
+                                         school, Waldorf)
+                          458         .  
+
+-------------------------------------------------------------------------------------------
+t2educ_class_1_r                                                         Educational status
+-------------------------------------------------------------------------------------------
+
+                  Type: Numeric (int)
+                 Label: t2educ_class_1_r_det5_lb
+
+                 Range: [1,9]                         Units: 1
+         Unique values: 9                         Missing .: 1,526/8,429
+
+            Tabulation: Freq.   Numeric  Label
+                          231         1  NET
+                          133         2  Internship
+                           38         3  10th school year
+                          104         4  Other intermediate solution
+                          188         5  2 years VET
+                        3,195         6  3-4 years VET
+                          685         7  Vocational baccalaureate //VET
+                        1,881         8  General baccalaureate
+                          448         9  Other general education
+                                         programme (specialized middle
+                                         school, Waldorf)
+                        1,526         .  
+
+-------------------------------------------------------------------------------------------
+t3educ_class_1_r                                                         Educational status
+-------------------------------------------------------------------------------------------
+
+                  Type: Numeric (int)
+                 Label: t3educ_class_1_r_det5_lb
+
+                 Range: [1,9]                         Units: 1
+         Unique values: 9                         Missing .: 2,275/8,429
+
+            Tabulation: Freq.   Numeric  Label
+                          320         1  NET
+                           45         2  Internship
+                            2         3  10th school year
+                           45         4  Other intermediate solution
+                           73         5  2 years VET
+                        2,938         6  3-4 years VET
+                          612         7  Vocational baccalaureate //VET
+                        1,721         8  General baccalaureate
+                          398         9  Other general education
+                                         programme (specialized middle
+                                         school, Waldorf)
+                        2,275         .  
+
+. log close
+      name:  <unnamed>
+       log:  T:\Team\TREE allgemein\Output\Visualisierungen_Ergebnisse_und_Doku\IWI_Open_Da
+> ta_Vorlesung\2023\TREE2_Codebook_IWI_Open_Data_Vorlesung_2023.txt
+  log type:  text
+ closed on:   3 May 2023, 17:46:29
+-------------------------------------------------------------------------------------------
