@@ -1,7 +1,7 @@
-﻿aes_canton,NAME
-Zurich (ZH),Zurich
-Berne (BE),Berne
-Lucerne (LU),Lucerne
+aes_canton,NAME
+Zurich (ZH),Zürich
+Berne (BE),Bern
+Lucerne (LU),Luzern
 Uri (UR),Uri
 Schwyz (SZ),Schwyz
 Obwalden (OW),Obwalden
@@ -23,5 +23,5 @@ Ticino (TI),Ticino
 Vaud (VD),Vaud
 Valais (VS),Valais
 Neuchâtel (NE),Neuchâtel
-Geneva (GE),Geneva
+Geneva (GE),Genève
 Jura (JU),Jura

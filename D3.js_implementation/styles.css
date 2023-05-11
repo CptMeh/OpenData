@@ -1,0 +1,10 @@
+#map {
+  width: 800px;
+  height: 600px;
+  rotate: 180deg;
+  transform: rotateY(180deg);
+}
+
+.navbar {
+  border-radius: 5px;
+}
