@@ -1,9 +1,13 @@
 #map {
-  width: 800px;
-  height: 600px;
+  height: 100%;
+  width: 100%;
+  overflow:scroll; 
   rotate: 180deg;
   transform: rotateY(180deg);
+  position: relative;
 }
+
+
 
 .navbar {
   border-radius: 5px;
