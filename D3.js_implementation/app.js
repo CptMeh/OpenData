@@ -90,7 +90,14 @@ function drawMap(map, data /*, index*/) {
                 "Gesammtteilnehmer: " + d.properties.details.both,
                 "Weibliche Teilnehmer: " + d.properties.details.female,
                 "Männliche Teilnehmer: " + d.properties.details.male,
-                "Immigrationstatus 1: " + d.properties.details.immigration_1
+                "Immigrationstatus 1: " + d.properties.details.immigration_1,
+                "Immigrationstatus 2: " + d.properties.details.immigration_2,
+                "Immigrationstatus 3: " + d.properties.details.immigration_3,
+                "Immigrationstatus 4: " + d.properties.details.immigration_4,
+                "Percent Immigration 1: " + d.properties.details.percent_immigration_1,
+                "Percent Immigration 2: " + d.properties.details.percent_immigration_2,
+                "Percent Immigration 3: " + d.properties.details.percent_immigration_3,
+                "Percent Immigration 4: " + d.properties.details.percent_immigration_4
       ];
 
       d3.select("#canton-info")
@@ -115,7 +122,10 @@ function showFullData(dataByKanton) {
     "Gesammtteilnehmer: " + dataByKanton["sum"].both,
     "Weibliche Teilnehmer: " + dataByKanton["sum"].female,
     "Männliche Teilnehmer: " + dataByKanton["sum"].male,
-    "Immigrationstatus 1: " + dataByKanton["sum"].immigration_1];
+    "Immigrationstatus 1: " + dataByKanton["sum"].immigration_1,
+    "Immigrationstatus 2: " + dataByKanton["sum"].immigration_2,
+    "Immigrationstatus 3: " + dataByKanton["sum"].immigration_3,
+    "Immigrationstatus 1: " + dataByKanton["sum"].immigration_4];
 
   // Remove previous text
   d3.select("#canton-info")
@@ -162,10 +172,6 @@ function prepareData(data/*, select*/) {
       };
     }
 
-    if (immigration === "Native (at least 1 parent born in Switzerland)") {
-      dataByKanton[kanton].immigration_1 +=1*IPW1;
-    }
-
     if (gender === "Female") {
       dataByKanton[kanton].female += 1;
       dataByKanton[kanton].both += 1;
@@ -176,6 +182,30 @@ function prepareData(data/*, select*/) {
       dataByKanton[kanton].both += 1;
       dataByKanton["sum"].male += 1;
     }
+
+        if (immigration === "Native (at least 1 parent born in Switzerland)") {
+      dataByKanton[kanton].immigration_1 +=1*IPW1;
+    }
+
+    if (immigration === "Second generation (respondent born in Switzerland, no parent born in Switzerland)") {
+      dataByKanton[kanton].immigration_2 +=1*IPW1;
+    }
+
+    if (immigration === "First generation (respondent and parent(s) born abroad)") {
+      dataByKanton[kanton].immigration_3 +=1*IPW1;
+    }
+
+    if (immigration === ".") {
+      dataByKanton[kanton].immigration_4 +=1*IPW1;
+    }
+
+    // needed for converting the totals to percent
+    total_immigration_weighted = dataByKanton[kanton].immigration_1+dataByKanton[kanton].immigration_2+dataByKanton[kanton].immigration_3+dataByKanton[kanton].immigration_4;
+
+    dataByKanton[kanton].percent_immigration_1 = (100/total_immigration_weighted)*dataByKanton[kanton].immigration_1;
+    dataByKanton[kanton].percent_immigration_2 = (100/total_immigration_weighted)*dataByKanton[kanton].immigration_2;
+    dataByKanton[kanton].percent_immigration_3 = (100/total_immigration_weighted)*dataByKanton[kanton].immigration_3;
+    dataByKanton[kanton].percent_immigration_4 = (100/total_immigration_weighted)*dataByKanton[kanton].immigration_4;
 
     dataByKanton["sum"].both += 1;
   });
