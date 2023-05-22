@@ -83,20 +83,22 @@ function drawMap(map, data /*, index*/) {
       d3.select(this) 
         .style("stroke", "while")
         .style("stroke-width", 2)
-        .style("curser", "pointer"); // Last part doesn't work yet
+        .style("cursor", "pointer");
 
       // Add Text info about selected part
       var arr = [d.properties.KantonName_de + " (" + d.properties.alternateName + ")" ,
                 "Gesammtteilnehmer: " + d.properties.details.both,
                 "Weibliche Teilnehmer: " + d.properties.details.female,
-                "Männliche Teilnehmer: " + d.properties.details.male];
+                "Männliche Teilnehmer: " + d.properties.details.male,
+                "Immigrationstatus 1: " + d.properties.details.immigration_1
+      ];
 
       d3.select("#canton-info")
         .append("p")
         .html(arr.join('<br/><br/>'));
     })
 
-    // De-highlight once curser leaves by changing back the style of the Kanton
+    // De-highlight once cursor leaves by changing back the style of the Kanton
     .on("mouseout", function(d) {
       d3.select(this)
         .style("stroke", "white")
@@ -112,7 +114,8 @@ function showFullData(dataByKanton) {
   var arr = ["Alle Kantone",
     "Gesammtteilnehmer: " + dataByKanton["sum"].both,
     "Weibliche Teilnehmer: " + dataByKanton["sum"].female,
-    "Männliche Teilnehmer: " + dataByKanton["sum"].male];
+    "Männliche Teilnehmer: " + dataByKanton["sum"].male,
+    "Immigrationstatus 1: " + dataByKanton["sum"].immigration_1];
 
   // Remove previous text
   d3.select("#canton-info")
@@ -130,12 +133,20 @@ function prepareData(data/*, select*/) {
   data.forEach(function (d) {
     var kanton = d["aes_canton"].includes("Basel") ? "beide Basel (BL/BS)" : d["aes_canton"];
     var gender = d["t0sex"];
+    // immigration status (1 - native, 2 - second gen, 3 - first gen, . - missing)
+    var immigration = d["t0immig"];
+    // Inverse Probability Weight - Wave 1
+    var IPW1 = d["t1wt"];
 
     if (!dataByKanton[kanton]) {
       dataByKanton[kanton] = {
         both: 0,
         female: 0,
-        male: 0
+        male: 0,
+        immigration_1: 0,
+        immigration_2: 0,
+        immigration_3: 0,
+        immigration_4: 0,
       };
     }
 
@@ -143,8 +154,16 @@ function prepareData(data/*, select*/) {
       dataByKanton["sum"] = {
         both: 0,
         female: 0,
-        male: 0
+        male: 0,
+        immigration_1: 0,
+        immigration_2: 0,
+        immigration_3: 0,
+        immigration_4: 0,
       };
+    }
+
+    if (immigration === "Native (at least 1 parent born in Switzerland)") {
+      dataByKanton[kanton].immigration_1 +=1*IPW1;
     }
 
     if (gender === "Female") {
