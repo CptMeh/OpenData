@@ -1,9 +1,13 @@
 // Maybe language?
 // let language = ...;
 
+document.addEventListener("mouseover", function(event) {
+  
+})
+
 // Make this dynamic!
-let width = window.innerWidth * 0.6; 
-let height = window.innerHeight * 0.8; 
+let width = 800; 
+let height = 800; 
 
 
 // Add an SVG to the div with the ID 'map' and then sets its height and width.
@@ -34,7 +38,7 @@ d3.queue()
 
 
   /* Renders the map itself and (once we get it to work) can then add the TREE-Data to it. (not implemented ye ,:D)*/
-function drawMap(map, data /*, index*/) {
+function drawMap(map, data) {
   // The projection determines what kind of plane the map itself is projected on to (eg. onto a globe or a flat plain).
   const projection = d3.geoIdentity().fitSize([width, height], map);
 
@@ -49,11 +53,7 @@ function drawMap(map, data /*, index*/) {
   let dataByKanton = prepareData(data/*, select*/);
 
 
-  map.features.forEach(function(d) {
-    d.properties.details = dataByKanton[d.properties.KantonName_de +" (" + d.properties.alternateName + ")"] ? 
-                            dataByKanton[d.properties.KantonName_de +" (" + d.properties.alternateName + ")"] : dataByKanton[d.properties.KantonName_fr +" (" + d.properties.alternateName + ")"] ?
-                            dataByKanton[d.properties.KantonName_fr +" (" + d.properties.alternateName + ")"] : dataByKanton[d.properties.KantonName_it +" (" + d.properties.alternateName + ")"];
-  });
+  prepareMapData(map, dataByKanton);
 
   //showFullData(dataByKanton);
 
@@ -81,28 +81,15 @@ function drawMap(map, data /*, index*/) {
 
       // Highlight selected part
       d3.select(this) 
-        .style("stroke", "while")
+        .style("stroke", "white")
         .style("stroke-width", 2)
-        .style("cursor", "pointer");
+        .style("cursor", "pointer");               
 
       // Add Text info about selected part
-      var arr = [d.properties.KantonName_de + " (" + d.properties.alternateName + ")" ,
-                "Gesammtteilnehmer: " + d.properties.details.both,
-                "Weibliche Teilnehmer: " + d.properties.details.female,
-                "Männliche Teilnehmer: " + d.properties.details.male,
-                "Immigrationstatus 1: " + d.properties.details.immigration_1,
-                "Immigrationstatus 2: " + d.properties.details.immigration_2,
-                "Immigrationstatus 3: " + d.properties.details.immigration_3,
-                "Immigrationstatus 4: " + d.properties.details.immigration_4,
-                "Percent Immigration 1: " + d.properties.details.percent_immigration_1,
-                "Percent Immigration 2: " + d.properties.details.percent_immigration_2,
-                "Percent Immigration 3: " + d.properties.details.percent_immigration_3,
-                "Percent Immigration 4: " + d.properties.details.percent_immigration_4
-      ];
+      //addTextBox(d);
 
-      d3.select("#canton-info")
-        .append("p")
-        .html(arr.join('<br/><br/>'));
+      // Add hover Text
+      addLabel(d, this);
     })
 
     // De-highlight once cursor leaves by changing back the style of the Kanton
@@ -111,9 +98,45 @@ function drawMap(map, data /*, index*/) {
         .style("stroke", "white")
         .style("stroke-width", 0.5);   
       
-      showFullData(dataByKanton);
+      //showFullData(dataByKanton);
+      svg.selectAll(".externalObject").remove(); 
+
 
     });
+}
+
+
+function addLabel(d, obj) {
+  /**/
+  let x = d3.select(obj).node().getBBox().x;
+  let y = d3.select(obj).node().getBBox().y;
+
+  svg.selectAll(".externalObject").remove(); 
+
+  svg.append("foreignObject")
+      .attr("class", "externalObject")
+      .attr("x", x + "px") // Placement of box
+      .attr("y", y + "px")
+      .attr("width", 200) // Size of box
+      .attr("height", 100)
+      .append("xhtml:div")
+      .style("rotate", "180deg") // This is nessecary, because everything is upside down because the map is weird :/
+      .style("transform", "rotateY(180deg)") // Ditto
+      .html("<div type='text'>" + createLabel(d) +"</div>");
+            //+ "<input type='text' id=new_x2 placeholder='" + DATEN.....);
+}
+
+function createLabel(d) {
+  return "<p>" + d.properties.KantonName_de + " (" + d.properties.alternateName + ")</p>" +
+  "<p>" + "Gesammtteilnehmer: " + d.properties.details.both + "</p>" +
+  "<p>" + "Weibliche Teilnehmer: " + d.properties.details.female + "</p>" +
+  "<p>" + "Männliche Teilnehmer: " + d.properties.details.male + "</p>" +
+  "<p>" + "Immigrationstatus 1: " + d.properties.details.immigration_1 + "</p>" +
+  "<p>" + "Immigrationstatus 2: " + d.properties.details.immigration_2 + "</p>" +
+  "<p>" + "Immigrationstatus 3: " + d.properties.details.immigration_3 + "</p>" +
+  "<p>" + "Percent Immigration 1: " + d.properties.details.percent_immigration_1 + "</p>" +
+  "<p>" + "Percent Immigration 2: " + d.properties.details.percent_immigration_2 + "</p>" +
+  "<p>" + "Percent Immigration 3: " + d.properties.details.percent_immigration_3 + "</p>";
 }
 
 function showFullData(dataByKanton) {
@@ -125,7 +148,9 @@ function showFullData(dataByKanton) {
     "Immigrationstatus 1: " + dataByKanton["sum"].immigration_1,
     "Immigrationstatus 2: " + dataByKanton["sum"].immigration_2,
     "Immigrationstatus 3: " + dataByKanton["sum"].immigration_3,
-    "Immigrationstatus 1: " + dataByKanton["sum"].immigration_4];
+    "Percent Immigration 1: " + dataByKanton["sum"].percent_immigration_1,
+    "Percent Immigration 2: " + dataByKanton["sum"].percent_immigration_2,
+    "Percent Immigration 3: " + dataByKanton["sum"].percent_immigration_3];
 
   // Remove previous text
   d3.select("#canton-info")
@@ -156,7 +181,6 @@ function prepareData(data/*, select*/) {
         immigration_1: 0,
         immigration_2: 0,
         immigration_3: 0,
-        immigration_4: 0,
       };
     }
 
@@ -168,7 +192,6 @@ function prepareData(data/*, select*/) {
         immigration_1: 0,
         immigration_2: 0,
         immigration_3: 0,
-        immigration_4: 0,
       };
     }
 
@@ -177,7 +200,7 @@ function prepareData(data/*, select*/) {
       dataByKanton[kanton].both += 1;
       dataByKanton["sum"].female += 1;
 
-    } else if (gender === "Male") {
+    } else  {
       dataByKanton[kanton].male += 1;
       dataByKanton[kanton].both += 1;
       dataByKanton["sum"].male += 1;
@@ -196,9 +219,33 @@ function prepareData(data/*, select*/) {
     dataByKanton[kanton].percent_immigration_1 = (100/total_immigration_weighted)*dataByKanton[kanton].immigration_1;
     dataByKanton[kanton].percent_immigration_2 = (100/total_immigration_weighted)*dataByKanton[kanton].immigration_2;
     dataByKanton[kanton].percent_immigration_3 = (100/total_immigration_weighted)*dataByKanton[kanton].immigration_3;
-    dataByKanton[kanton].percent_immigration_4 = (100/total_immigration_weighted)*dataByKanton[kanton].immigration_4;
 
     dataByKanton["sum"].both += 1;
   });
   return dataByKanton;
+}
+
+function addTextBox(d) {
+  var arr = [d.properties.KantonName_de + " (" + d.properties.alternateName + ")",
+  "Gesammtteilnehmer: " + d.properties.details.both,
+  "Weibliche Teilnehmer: " + d.properties.details.female,
+  "Männliche Teilnehmer: " + d.properties.details.male,
+  "Immigrationstatus 1: " + d.properties.details.immigration_1,
+  "Immigrationstatus 2: " + d.properties.details.immigration_2,
+  "Immigrationstatus 3: " + d.properties.details.immigration_3,
+  "Percent Immigration 1: " + d.properties.details.percent_immigration_1,
+  "Percent Immigration 2: " + d.properties.details.percent_immigration_2,
+  "Percent Immigration 3: " + d.properties.details.percent_immigration_3];
+
+  d3.select("#canton-info")
+    .append("p")
+    .html(arr.join('<br/><br/>'));
+}
+
+function prepareMapData(map, dataByKanton) {
+  map.features.forEach(function (d) {
+    d.properties.details = dataByKanton[d.properties.KantonName_de + " (" + d.properties.alternateName + ")"] ?
+      dataByKanton[d.properties.KantonName_de + " (" + d.properties.alternateName + ")"] : dataByKanton[d.properties.KantonName_fr + " (" + d.properties.alternateName + ")"] ?
+        dataByKanton[d.properties.KantonName_fr + " (" + d.properties.alternateName + ")"] : dataByKanton[d.properties.KantonName_it + " (" + d.properties.alternateName + ")"];
+  });
 }
