@@ -55,7 +55,7 @@ function drawMap(map, data /*, index*/) {
                             dataByKanton[d.properties.KantonName_fr +" (" + d.properties.alternateName + ")"] : dataByKanton[d.properties.KantonName_it +" (" + d.properties.alternateName + ")"];
   });
 
-  showFullData(dataByKanton);
+  //showFullData(dataByKanton);
 
 
   svg.selectAll("path")
@@ -183,20 +183,11 @@ function prepareData(data/*, select*/) {
       dataByKanton["sum"].male += 1;
     }
 
-        if (immigration === "Native (at least 1 parent born in Switzerland)") {
-      dataByKanton[kanton].immigration_1 +=1*IPW1;
-    }
-
-    if (immigration === "Second generation (respondent born in Switzerland, no parent born in Switzerland)") {
-      dataByKanton[kanton].immigration_2 +=1*IPW1;
-    }
-
-    if (immigration === "First generation (respondent and parent(s) born abroad)") {
-      dataByKanton[kanton].immigration_3 +=1*IPW1;
-    }
-
-    if (immigration === ".") {
-      dataByKanton[kanton].immigration_4 +=1*IPW1;
+    switch (immigration) {
+      case "Native (at least 1 parent born in Switzerland)" : dataByKanton[kanton].immigration_1 +=1*IPW1;
+      case "Second generation (respondent born in Switzerland, no parent born in Switzerland)" : dataByKanton[kanton].immigration_2 +=1*IPW1;
+      case "First generation (respondent and parent(s) born abroad)" : dataByKanton[kanton].immigration_3 +=1*IPW1;
+      case "." :  dataByKanton[kanton].immigration_4 +=1*IPW1;
     }
 
     // needed for converting the totals to percent
