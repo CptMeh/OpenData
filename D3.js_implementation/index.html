@@ -10,6 +10,7 @@
     
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
@@ -53,7 +54,7 @@
 
   </br>
 
-    <!--Map-->
+    
     <div id="map-card" class="card row p-5 mb-5">
 
         <div id="ckeckboxes" class="from-check">
@@ -84,10 +85,14 @@
           <input id="var7" class="from-check-input" type="checkbox" value="">
           <label class="from-check-label" for="var7">Var 7</label>
         </div>
+
+      <!--Map-->
         <div id="canton-info" class=" col-sm">
             <h4>Informationen</h4>
         </div>
-        <div id="map" class="card map col-fit-scale"></div>
+        <div id="map" class="card map col-fit-scale">
+          
+        </div>
     </div>
     <!--Map-->
  </br>
@@ -114,6 +119,8 @@
   </div>
 
   <script src="app.js"></script>
+  <script src="./functions/tooltip.js"></script>
+  <script src="./functions/map.js"></script>
 
 </body>
 

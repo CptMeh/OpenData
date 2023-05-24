@@ -98,7 +98,7 @@ d3.tip = function() {
     // Returns tip or direction
     tip.direction = function(v) {
       if (!arguments.length) return direction
-      direction = v == null ? v : d3.functor(v)
+      direction = v == null ? v : typeof v === 'function' ? v : () => v;
   
       return tip
     }
@@ -106,23 +106,23 @@ d3.tip = function() {
     // Public: Sets or gets the offset of the tip
     //
     // v - Array of [x, y] offset
-    //
+    //functor
     // Returns offset or
     tip.offset = function(v) {
       if (!arguments.length) return offset
-      offset = v == null ? v : d3.functor(v)
+      offset = v == null ? v : typeof v === 'function' ? v : () => v;
   
       return tip
     }
   
     // Public: sets or gets the html value of the tooltip
-    //
+    //d3.functor is not a function
     // v - String value of the tip
     //
     // Returns html value or tip
     tip.html = function(v) {
       if (!arguments.length) return html
-      html = v == null ? v : d3.functor(v)
+      html = v == null ? v : typeof v === 'function' ? v : () => v;
   
       return tip
     }

@@ -1,0 +1,11 @@
+- geschlecht
+- Parents highest education attainment
+- immigration status
+- parental socioeconomic status
+    - low
+    - medium
+    - high
+- Math score level
+    - low medium high
+- National school programms
+- Educational status
