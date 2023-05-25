@@ -1,5 +1,3 @@
-// Make this dynamic!
-
 const width = 800; 
 const height = 800; 
 // Maybe language?
@@ -20,18 +18,15 @@ d3.queue()
   // This one is the TREE-Data
   .defer(d3.csv, "https://raw.githubusercontent.com/CptMeh/OpenData/main/Daten/TREE2_Data_IWI_Open_Data_Vorlesung_2023_label.csv")
 
-  .defer(d3.csv, "https://raw.githubusercontent.com/CptMeh/OpenData/main/Daten/labels.csv")
+  // Geting the labels for the TREE-Data
+  .defer(d3.csv, "https://raw.githubusercontent.com/CptMeh/OpenData/ramon/D3.js_implementation/Daten/labels.csv")
   // Wait till all the data is ready
   .await(function (error, map, data, labels) {
       if (error) {
         console.error("Somthing went wrong: " + error);
       } else {
-        /*var select = document.querySelector('.messageCheckbox:checked').value;
-
-        if (select === null) console.error("Selection failed");
-        console.log(select);*/
         addChecks(labels);
-        drawMap(map, data, "select");
+        drawMap(map, data);
       }
   }
 );
