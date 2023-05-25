@@ -1,9 +1,11 @@
+let text;
+
 // Renders the map and can then add the TREE-Data to it.
-function drawMap(map, data /*,index */) {
+function drawMap(map, data, select) {
     let projection = d3.geoIdentity().reflectY(true).fitSize([width*0.9, height*0.9], map);// The projection determines what kind of plane the map itself is projected on to (eg. onto a globe or a flat plain).
     let path = d3.geoPath().projection(projection);
     
-    updateMap(map, data, "gender"); // Prepare the data that should be rendered (decided by user via selection panel)
+    updateMap(map, data, select); // Prepare the data that should be rendered (decided by user via selection panel)
 
 
     let tooltip = d3.select("#map")
@@ -81,10 +83,17 @@ function updateMap(map, data, select) {
         let kanton = d["aes_canton"].includes("Basel") ? "beide Basel (BL/BS)" : d["aes_canton"];
     
         switch (select) {
-          case "gender" : prepareGender(d, dataByKanton, kanton); break;
-          case "immigratoin" : prepareImmigration(d, dataByKanton, kanton); break;
-          case "" : break;
-          default : break;
+            case "t0sex" : prepareGender(d, dataByKanton, kanton); break; // Gender
+            case "t0immig" : prepareImmigration(d, dataByKanton, kanton); break; // Immigration status
+            case "t0fmedu_comp" : prepareParentsEdjuation(d, dataByKanton, kanton); break; // Parents' highest educational attainment [composite]
+            case "aes_langreg" : prepareLanguage(d, dataByKanton, kanton); break; // Language region 
+            case "t0hisei08_3q" : prepareParentsSES(d, dataByKanton, kanton); break; // Parental socioeconomic status level (tercile)
+            case "t0wlem_3q" : prepareMathScore(d, dataByKanton, kanton); break; // Math score level (tercile)
+            case "t0st_nprog_req3" : prepareNSP(d, dataByKanton, kanton); break; // National school programme (requirements)
+            case "t1educ_class_1_r" : prepareEduStatus1(d, dataByKanton, kanton); break; // Educational status t1
+            case "t2educ_class_1_r" : prepareEduStatus2(d, dataByKanton, kanton); break; // Educational status t2
+            case "t3educ_class_1_r" : prepareEduStatus3(d, dataByKanton, kanton); break; // Educational status t3
+            default : break;
         }
       });
 

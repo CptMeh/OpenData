@@ -25,7 +25,7 @@ d3.queue()
       if (error) {
         console.error("Somthing went wrong: " + error);
       } else {
-        drawMap(map, data);
+        drawMap(map, data, "t0sex");
       }
   }
 );
