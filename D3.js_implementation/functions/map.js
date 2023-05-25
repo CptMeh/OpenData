@@ -7,19 +7,20 @@ function drawMap(map, data, select) {
     
     updateMap(map, data, select); // Prepare the data that should be rendered (decided by user via selection panel)
 
-
     let tooltip = d3.select("#map")
-                        .append("div")
-                        .attr("id", "tooltip")
-                        // Somehow the following is not added via id. find out why
-                        .style("opacity", 0)
-                        .attr("class", "tooltip")
-                        .style("background-color", "white")
-                        .style("border", "solid")
-                        .style("border-width", "2px")
-                        .style("border-radius", "5px")
-                        .style("padding", "5px")
-                        .style("position","absolute");
+                    .append("div")
+                    .attr("id", "tooltip")
+                    // Somehow the following is not added via id. find out why
+                    .style("opacity", 0)
+                    .attr("class", "tooltip")
+                    .style("background-color", "white")
+                    .style("border", "solid")
+                    .style("border-width", "2px")
+                    .style("border-radius", "5px")
+                    .style("padding", "5px")
+                    .style("position","absolute")
+                    .style("pointer-events", "none"); /*This makes the tooltip unclickable, so it doesn't block the canton behind it, once it is made invisible again. 
+                                                        However, this hinders the user from copying the info in the box, not very handy :/ */
 
     let color = d3.scaleSequential()
                     .interpolator(d3.interpolateInferno)
@@ -38,13 +39,22 @@ function drawMap(map, data, select) {
     };
 
     let current = null; // for enabling toggling of the tooltip box
+    let clicked = false;
     let mouseclick = function(d) {
         // Adds the text to the tooltip and updates the position on where the mouse is.
         tooltip.html(createLabel(d))
-                .style("left", (d3.mouse(this)[0]+25) + "px")
-                .style("top", (d3.mouse(this)[1]) + "px");
+                .style("left", (d3.mouse(this)[0]) + "px")
+                .style("top", (d3.mouse(this)[1]+80) + "px");
 
-        current === this ? tooltip.style("opacity", 0.8) : tooltip.style("opacity", 0)
+        if (current === this && clicked) {
+            tooltip.style("opacity", 0.0) // make tooltip visible
+                    .style("z-index", "0"); // make it go behind the cantons, so it doesn't block them
+            clicked = false;
+        } else {
+            tooltip.style("opacity", 0.8)
+                    .style("z-index", "2");
+            clicked = true;
+        }
         current = this;
     };
     
@@ -65,11 +75,11 @@ function drawMap(map, data, select) {
         .append("path")
             .attr("class", "canton")
             .attr("id", function(d) { return d.properties.KantonId; })
-            .attr("d", path) 
+            .attr("d", path)
             .style("fill", "grey") // Set the background color of the Kantons
             .style("stroke", "white") // Set the color of the Kanton Borders
             .style("stroke-width", 0.5) // Thickness of the borderlines
-            .style("z-index", "950")
+            .style("z-index", "1")
         .on("mouseover", mouseover)
         .on("click", mouseclick)
         .on("mouseleave", mouseleave);
@@ -93,7 +103,7 @@ function updateMap(map, data, select) {
             case "t1educ_class_1_r" : prepareEduStatus1(d, dataByKanton, kanton); break; // Educational status t1
             case "t2educ_class_1_r" : prepareEduStatus2(d, dataByKanton, kanton); break; // Educational status t2
             case "t3educ_class_1_r" : prepareEduStatus3(d, dataByKanton, kanton); break; // Educational status t3
-            default : break;
+            default : console.log("No selection made!"); break;
         }
       });
 
