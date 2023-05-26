@@ -34,9 +34,9 @@ function drawMap(m, d) {
     let clicked = false;
     let mouseclick = function(d) {
         // Adds the text to the tooltip and updates the position on where the mouse is.
-        tooltip.html(createLabel(d))
+        tooltip.html(createLabel(d, select))
                 .style("left", (d3.mouse(this)[0]) + "px")
-                .style("top", (d3.mouse(this)[1]+300) + "px");
+                .style("top", (d3.mouse(this)[1]) + "px");
 
         if (current === this && clicked) {
             tooltip.style("opacity", 0.0) // make tooltip visible
@@ -107,22 +107,48 @@ function updateMap(s) {
     prepareMapData(map, dataByKanton);
 }
 
-function createLabel(d) {
+function createLabel(d, select) {
     let properties = d.properties;
     let details = properties.details;
-    let label = "<p><b>" + properties.KantonName_de + " (" + d.properties.alternateName + ")</b></p>" +
-            "<p>" + "Gesammtteilnehmer: " + details.both + "</p>" +
-            "<p>" + "Weibliche Teilnehmer: " + details.female + "</p>" +
-            "<p>" + "Männliche Teilnehmer: " + details.male + "</p>"/* +
-            "<p>" + "Immigrationstatus 1: " + details.immigration_1 + "</p>" +
-            "<p>" + "Immigrationstatus 2: " + details.immigration_2 + "</p>" +
-            "<p>" + "Immigrationstatus 3: " + details.immigration_3 + "</p>" +
-            "<p>" + "Percent Immigration 1: " + details.percent_immigration_1 + "</p>" +
-            "<p>" + "Percent Immigration 2: " + details.percent_immigration_2 + "</p>" +
-            "<p>" + "Percent Immigration 3: " + details.percent_immigration_3 + "</p>"*/;
+    let label = "<p><b>" + properties.KantonName_de + " (" + d.properties.alternateName + ")</b></p>";
+    
+
+    switch(select) {
+        case "t0sex" :  label += "<p>" + "Gesammtteilnehmer: " + details.both + "</p>" +
+                                "<p>" + "Weibliche Teilnehmer: " + details.female + "</p>" +
+                                "<p>" + "Männliche Teilnehmer: " + details.male + "</p>"; 
+                        break;
+        case "t0immig": label += "<p>" + "Immigrationstatus 1: " + details.immigration_1 + "</p>" +
+                                "<p>" + "Immigrationstatus 2: " + details.immigration_2 + "</p>" +
+                                "<p>" + "Immigrationstatus 3: " + details.immigration_3 + "</p>" +
+                                "<p>" + "Percent Immigration 1: " + details.percent_immigration_1 + "</p>" +
+                                "<p>" + "Percent Immigration 2: " + details.percent_immigration_2 + "</p>" +
+                                "<p>" + "Percent Immigration 3: " + details.percent_immigration_3 + "</p>"; 
+                        break; 
+        default : break;
+    }
+
     return label;
 }
 
+
+function prepareGender(d, dataByKanton, kanton) {
+    let gender = d["t0sex"];
+
+    dataByKanton[kanton] = assignVariables(dataByKanton[kanton], {both: 0, female: 0, male: 0,});
+    dataByKanton["sum"] = assignVariables(dataByKanton["sum"], {both: 0, female: 0, male: 0,});
+
+    if (gender === "Female") {
+        dataByKanton[kanton].female += 1;
+        dataByKanton["sum"].female += 1;
+
+    } else if (gender === "Male") {
+        dataByKanton[kanton].male += 1;
+        dataByKanton["sum"].male += 1;
+    }
+    dataByKanton[kanton].both += 1;
+    dataByKanton["sum"].both += 1;
+}
 
 function prepareImmigration(d, dataByKanton, kanton) {
     let immigration = d["t0immig"]; // immigration status (1 - native, 2 - second gen, 3 - first gen, . - missing)
@@ -149,26 +175,36 @@ function prepareImmigration(d, dataByKanton, kanton) {
     dataByKanton[kanton].percent_immigration_3 = (100 / total_immigration_weighted) * dataByKanton[kanton].immigration_3;
 }
 
+function prepareParentsEdjuation(d, dataByKanton, kanton) {
+    let education = d["t0fmedu_comp"];
 
+    dataByKanton[kanton] = assignVariables(dataByKanton[kanton], {compusory_school: 0, upper_secondary: 0, tertiary: 0, other: 0,});
 
-
-function prepareGender(d, dataByKanton, kanton) {
-  let gender = d["t0sex"];
-
-  dataByKanton[kanton] = assignVariables(dataByKanton[kanton], {both: 0, female: 0, male: 0,});
-  dataByKanton["sum"] = assignVariables(dataByKanton["sum"], {both: 0, female: 0, male: 0,});
-
-  if (gender === "Female") {
-    dataByKanton[kanton].female += 1;
-    dataByKanton["sum"].female += 1;
-
-  } else if (gender === "Male") {
-    dataByKanton[kanton].male += 1;
-    dataByKanton["sum"].male += 1;
-  }
-  dataByKanton[kanton].both += 1;
-  dataByKanton["sum"].both += 1;
+    switch (education) {
+        case "Compulsory schooling only" : dataByKanton[kanton].compusory_school += 1; break;
+        case "Upper secondary education" : dataByKanton[kanton].upper_secondary += 1; break;
+        case "Tertiary education" : dataByKanton[kanton].tertiary += 1; break;
+        default : dataByKanton[kanton].other += 1; break;
+    }
 }
+
+function prepareLanguage(d, dataByKanton, kanton) {
+
+}
+
+function prepareParentsSES(d, dataByKanton, kanton) {}
+
+function prepareParentsSES(d, dataByKanton, kanton) {}
+
+function prepareMathScore(d, dataByKanton, kanton) {}
+
+function prepareNSP(d, dataByKanton, kanton) {}
+
+function prepareEduStatus1(d, dataByKanton, kanton) {}
+
+function prepareEduStatus2(d, dataByKanton, kanton) {}
+
+function prepareEduStatus3(d, dataByKanton, kanton) {}
 
 function assignVariables(data, variables) {
   if (!data) {
@@ -186,6 +222,4 @@ function prepareMapData(map, dataByKanton) {
         dataByKanton[p.KantonName_fr + " (" + p.alternateName + ")"] : dataByKanton[p.KantonName_it + " (" + p.alternateName + ")"] ?
         dataByKanton[p.KantonName_it + " (" + p.alternateName + ")"] : dataByKanton[p.KantonName_en + " (" + p.alternateName + ")"];
     });
-
-
 }

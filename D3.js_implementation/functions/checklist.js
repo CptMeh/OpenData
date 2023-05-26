@@ -24,8 +24,8 @@ function addChecks(labels) {
         
         if (i === 0) {
             check.attr("checked", "true");
-        } else if (i >= 2) {
-            check.attr("disabled", "true");
+        } else if (i >= 3) {
+            check.attr("disabled", "true"); //Temorary because haven't done those yet
         }
 
         div.append("label")
