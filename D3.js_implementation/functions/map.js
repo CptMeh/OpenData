@@ -1,6 +1,6 @@
 let map;
 let data;
-let select;
+let text;
 
 // Renders the map and can then add the TREE-Data to it.
 function drawMap(m, d) {
@@ -34,7 +34,7 @@ function drawMap(m, d) {
     let clicked = false;
     let mouseclick = function(d) {
         // Adds the text to the tooltip and updates the position on where the mouse is.
-        tooltip.html(createLabel(d, select))
+        tooltip.html(createLabel(d))
                 .style("left", (d3.mouse(this)[0]) + "px")
                 .style("top", (d3.mouse(this)[1]) + "px");
 
@@ -82,41 +82,70 @@ function drawMap(m, d) {
 }
 
 // Updates the map if the variables change.
-function updateMap(s) {
+function updateMap(select) {
     let dataByKanton = {};
-    select = s;
+    let values = {};
+
+    values = getValues(dataByKanton, select);
+
+    dataByKanton = Array.apply(null, Array(27)).map(function (x) { return values; });
 
     data.forEach(function (d) {
-        let kanton = d["aes_canton"].includes("Basel") ? "beide Basel (BL/BS)" : d["aes_canton"];
-    
-        switch (select) {
-            case "t0sex" : prepareGender(d, dataByKanton, kanton); break; // Gender
-            case "t0immig" : prepareImmigration(d, dataByKanton, kanton); break; // Immigration status
-            case "t0fmedu_comp" : prepareParentsEdjuation(d, dataByKanton, kanton); break; // Parents' highest educational attainment [composite]
-            case "aes_langreg" : prepareLanguage(d, dataByKanton, kanton); break; // Language region 
-            case "t0hisei08_3q" : prepareParentsSES(d, dataByKanton, kanton); break; // Parental socioeconomic status level (tercile)
-            case "t0wlem_3q" : prepareMathScore(d, dataByKanton, kanton); break; // Math score level (tercile)
-            case "t0st_nprog_req3" : prepareNSP(d, dataByKanton, kanton); break; // National school programme (requirements)
-            case "t1educ_class_1_r" : prepareEduStatus1(d, dataByKanton, kanton); break; // Educational status t1
-            case "t2educ_class_1_r" : prepareEduStatus2(d, dataByKanton, kanton); break; // Educational status t2
-            case "t3educ_class_1_r" : prepareEduStatus3(d, dataByKanton, kanton); break; // Educational status t3
-            default : console.log("no"); break;
-        }
-      });
+        prepare(d, dataByKanton, select, values);
+    });
 
     prepareMapData(map, dataByKanton);
 }
 
-function createLabel(d, select) {
-    let properties = d.properties;
-    let details = properties.details;
-    let label = "<p><b>" + properties.KantonName_de + " (" + d.properties.alternateName + ")</b></p>";
-    
+
+function getValues(dataByKanton, select) {
+    switch (select) {
+        case "t0sex": return { both: 0, 1: 0, 2: 0, };  // Gender
+
+
+        case "t0immig" : return { both: 0, 1: 0, 2: 0, 3: 0, other: 0,}; // Immigration status
+        //case "t0fmedu_comp" : prepare(d, dataByKanton, kanton, "t0fmedu_comp", {compusory_school: 0, upper_secondary: 0, tertiary: 0, other: 0,}); break; // Parents' highest educational attainment [composite]
+        case "aes_langreg": return { 1: 0, 2: 0, 3: 0, other: 0,};  // Language region 
+        case "t0hisei08_3q": return { 1: 0, 2: 0, 3: 0, other: 0, };  // Parental socioeconomic status level (tercile)
+        case "t0wlem_3q": return { 1: 0, 2: 0, 3: 0, other: 0, };  // Math score level (tercile)
+        case "t0st_nprog_req3": return { 1: 0, 2: 0, 3: 0, other: 0, };  // National school programme (requirements)
+        case "t1educ_class_1_r": ; // Educational status t1
+        case "t2educ_class_1_r": ; // Educational status t2
+        case "t3educ_class_1_r": return ; // Educational status t3
+        default: console.log("no"); return {};
+    }
+}
+
+function prepare(d, dataByKanton, select, values) {
+    let variable = d[select];
+    let kanton = d["aes_canton"];
+
+    if (values.hasOwnProperty(variable)) {
+        dataByKanton[kanton][variable] += 1;
+    } else {
+        dataByKanton[kanton].other += 1;
+    }
+    //text = createLabel(d, select);
+}
+
+function prepareMapData(map, dataByKanton) {
+    map.features.forEach(function (d) {
+        let p = d.properties;
+
+        d.properties.details = dataByKanton[p.KantonId];
+    });
+}
+
+
+function createLabel(d) {
+    let details = d.properties.details;
+    let label = "<p><b>" + d.properties.KantonName_de + " (" + d.properties.alternateName + ")</b></p>";
+    let select = "t0immig";
 
     switch(select) {
-        case "t0sex" :  label += "<p>" + "Gesammtteilnehmer: " + details.both + "</p>" +
-                                "<p>" + "Weibliche Teilnehmer: " + details.female + "</p>" +
-                                "<p>" + "Männliche Teilnehmer: " + details.male + "</p>"; 
+        case "t0sex" :  label += "<p>" + "Gesammt: " + (details["1"] + details["1"]) + "</p>" +
+                                "<p>" + "Weiblich: " + details["1"] + "</p>" +
+                                "<p>" + "Männlich: " + details["2"] + "</p>"; 
                         break;
         case "t0immig": label += "<p>" + "Immigrationstatus 1: " + details.immigration_1 + "</p>" +
                                 "<p>" + "Immigrationstatus 2: " + details.immigration_2 + "</p>" +
@@ -129,25 +158,6 @@ function createLabel(d, select) {
     }
 
     return label;
-}
-
-
-function prepareGender(d, dataByKanton, kanton) {
-    let gender = d["t0sex"];
-
-    dataByKanton[kanton] = assignVariables(dataByKanton[kanton], {both: 0, female: 0, male: 0,});
-    dataByKanton["sum"] = assignVariables(dataByKanton["sum"], {both: 0, female: 0, male: 0,});
-
-    if (gender === "Female") {
-        dataByKanton[kanton].female += 1;
-        dataByKanton["sum"].female += 1;
-
-    } else if (gender === "Male") {
-        dataByKanton[kanton].male += 1;
-        dataByKanton["sum"].male += 1;
-    }
-    dataByKanton[kanton].both += 1;
-    dataByKanton["sum"].both += 1;
 }
 
 function prepareImmigration(d, dataByKanton, kanton) {
@@ -188,38 +198,28 @@ function prepareParentsEdjuation(d, dataByKanton, kanton) {
     }
 }
 
-function prepareLanguage(d, dataByKanton, kanton) {
+function prepareParentsSES(d, dataByKanton, kanton) {
+    let parentsSES = d["t0hisei08_3q"];
 
+    dataByKanton[kanton] = assignVariables(dataByKanton[kanton], {Low: 0, Medium: 0, High: 0, other: 0,});
+
+    switch (parentsSES) {
+        case "Low" : dataByKanton[kanton].low += 1; break;
+        case "Medium" : dataByKanton[kanton].medium += 1; break;
+        case "High" : dataByKanton[kanton].high += 1; break;
+        default : dataByKanton[kanton].other += 1; break;
+    }
 }
 
-function prepareParentsSES(d, dataByKanton, kanton) {}
+function prepareMathScore(d, dataByKanton, kanton) {
+    let parentsSES = d["t0hisei08_3q"];
 
-function prepareParentsSES(d, dataByKanton, kanton) {}
+    dataByKanton[kanton] = assignVariables(dataByKanton[kanton], {low: 0, medium: 0, high: 0, other: 0,});
 
-function prepareMathScore(d, dataByKanton, kanton) {}
-
-function prepareNSP(d, dataByKanton, kanton) {}
-
-function prepareEduStatus1(d, dataByKanton, kanton) {}
-
-function prepareEduStatus2(d, dataByKanton, kanton) {}
-
-function prepareEduStatus3(d, dataByKanton, kanton) {}
-
-function assignVariables(data, variables) {
-  if (!data) {
-    data = variables;
-  }
-  return data;
-}
-
-function prepareMapData(map, dataByKanton) {
-  map.features.forEach(function (d) {
-    let p = d.properties;
-
-    p.details = dataByKanton[p.KantonName_de + " (" + p.alternateName + ")"] ?
-        dataByKanton[p.KantonName_de + " (" + p.alternateName + ")"] : dataByKanton[p.KantonName_fr + " (" + p.alternateName + ")"] ?
-        dataByKanton[p.KantonName_fr + " (" + p.alternateName + ")"] : dataByKanton[p.KantonName_it + " (" + p.alternateName + ")"] ?
-        dataByKanton[p.KantonName_it + " (" + p.alternateName + ")"] : dataByKanton[p.KantonName_en + " (" + p.alternateName + ")"];
-    });
+    switch (parentsSES) {
+        case "Low" : dataByKanton[kanton].low += 1; break;
+        case "Medium" : dataByKanton[kanton].medium += 1; break;
+        case "High" : dataByKanton[kanton].high += 1; break;
+        default : dataByKanton[kanton].other += 1; break;
+    }
 }

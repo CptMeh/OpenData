@@ -2,6 +2,7 @@
   height: 750px;
   width: 850px;
   overflow:scroll; 
+  float: left;
 }
 
 .tooltip {
@@ -14,6 +15,7 @@
   z-index: 1;
   position: absolute;
 }
+
 
 .navbar {
   border-radius: 5px;
