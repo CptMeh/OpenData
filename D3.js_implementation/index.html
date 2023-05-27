@@ -5,44 +5,53 @@
     <meta charset="utf-8">
     <title>index</title>
 
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    
 </head>
 
 <body>
     <!--Navbar-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand px-2" href="#">TREE-Visualisierung</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Übersicht</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Map</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Benutzte Daten</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown links
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </nav>
+      <a class="navbar-brand px-4" href="#">TREE-Visualisierung</a>
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">        
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link px-4" href="#map">Map</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link px-4" href="#descr">Beschreibung</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link px-4" href="#dev">Developers</a>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle px-4" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Links
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="https://www.tree.unibe.ch/">TREE Studie</a>
+              <a class="dropdown-item" href="https://github.com/CptMeh/OpenData">GitHub</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  
   <!--Navbar-->
 
   <div id="main" class="container mb-3">
@@ -63,20 +72,25 @@
       <!--Map-->
     </div>
 
-    <div class="card p-3 mb-3 component">
+    <div id="descr" class="card p-3 mb-3 component">
       <h2>Beschreibung</h2>
       <p>Beschreibungstext hier!</p>
     </div>
 
-    <div class="card p-3 mb-3 component">
+    <div id="links" class="card p-3 mb-3 component">
       <h2>Links</h2>
       <p>Links zu verwendeten Daten hier!</p>
     </div>
 
-    <div class="card p-3 mb-3 component">
+    <div id="dev" class="card p-3 mb-3 component">
       <h2>Developers</h2>
-      <p>Marlene Kulowatz ...</p>
-      <p>Ramon Näf ...</p>
+      <p>
+        Diese Visualisierung wurde von Marlene Kulowatz und Ramon Näf als projekt für 
+        die Vorlesung Open Data und Open Government an der Universität Bern entwickelt.
+        Die Daten zur TREE-Studie wurden und von 
+        <a href="https://www.tree.unibe.ch/ueber_uns/personen/dr_meyer_thomas/index_ger.html">Dr. Tomas Mayer</a> 
+        zur verfügung gestellt.
+      </p>
     </div>
 
     <script src="app.js"></script>
