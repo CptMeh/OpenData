@@ -52,8 +52,6 @@
         </ul>
       </div>
     </nav>
-  
-  <!--Navbar-->
 
   <div id="main" class="container mb-3">
 
@@ -66,27 +64,38 @@
       <div id="var-check" class="mb-3 col-6">
           <h4>Variablen:</h4>
       </div>
-      <!--Check List-->
+
 
       <!--Map-->
       <div id="map" class="col"></div>
-      <!--Map-->
+
     </div>
 
-    <div id="descr" class="card p-3 mb-3 component">
+    <div id="descr" class="card p-4 mb-3 component">
       <h2>Beschreibung</h2>
-      <p>Beschreibungstext hier!</p>
-    </div>
+      <h4 class="mt-5">Visualisierung der TREE2-Kohorte</h4>
+      <p>
+        Die visualisiert die Ergebnisse der TREE2-Kohorte. Hierbei werden jeweis Kantonal die Resultate aufgeführt und farblich gekennzeichnet.
 
-    <div id="dev" class="card p-3 mb-3 component">
-      <h2>Developers</h2>
+      </p>
+
+      <h4 class="mt-4">TREE-Studie</h4>
+      <p>
+        TREE (Transitionen von der Erstausbildung ins Erwerbsleben) ist eine gesamtschweizerische, längsschnittlich angelegte Befragung zum Übergang 
+        Jugendlicher von der Schule ins Erwachsenenleben (Transition). Im Zentrum der Untersuchung stehen die Ausbildungs- und Erwerbsverläufe nach Austritt 
+        aus der obligatorischen Schule. Die erste Stichprobe (TREE1) umfasst über 6'000 Jugendliche, die im Jahr 2000 am Projekt PISA (Programme for 
+        International Student Assessment) teilnahmen und im selben Jahr aus der obligatorischen Schulpflicht entlassen wurden. Die Stichprobe ist national 
+        und sprachregional repräsentativ. Eine zweiteStichprobe (TREE2) von fast 10'000 Jugendlichen wird seit 2016 längsschnittlich befragt. Damit gehört 
+        TREE zu einer der weltweit wenigen Multi-Kohorten-Studien, welche kohortenvergleichende Analysen ermöglichen.
+      </p>
+      
+      <h4 class="mt-4">Weiteres</h4>
       <p>
         Diese Visualisierung wurde von Marlene Kulowatz und Ramon Näf als projekt für 
         die Vorlesung Open Data und Open Government an der Universität Bern im Frühjahressemester 2023 entwickelt.
         Die Daten zur TREE-Studie wurden von 
         <a href="https://www.tree.unibe.ch/ueber_uns/personen/dr_meyer_thomas/index_ger.html">Dr. Tomas Mayer</a> 
         zur verfügung gestellt.
-
       </p>
     </div>
 
@@ -94,6 +103,29 @@
     <script src="./functions/map.js"></script>
     <script src="./functions/checklist.js"></script>
   </div>
+
+  <footer id="end-card" class="row p-3">
+    <div id="dev" class="col p-3 mb-3">
+      <h5>Developers</h5>
+      <dt>Marlene Kulowatz</dt>
+      <dd class="small">marlene.kulowatz@students.unibe.ch</dd>
+      <dt>Ramon Näf</dt>
+      <dd class="small">ramon.naef@students.unibe.ch</dd>
+    </div>
+
+    <div id="git" class="col p-3 mb-3">
+      <h5>Repository</h5>
+      <a class="small" href="https://github.com/CptMeh/OpenData">github.com</a>
+    </div>
+
+    <div id="tree" class="col p-3 mb-3">
+      <h5>TREE-Studie</h5>
+      <dd>Universität Bern</dd>
+      <dd>Institut für Soziologie</dd>
+      <a class="small" href="https://www.tree.unibe.ch/">www.tree.unibe.ch</a>
+    </div>
+
+  </footer>
 </body>
 
 </html>
