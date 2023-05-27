@@ -2,6 +2,20 @@ let select;
 let text;
 
 // Renders the map and can then add the TREE-Data to it.
+
+function transformValuesToColors(colorArray, value) {
+
+    // Define the color scale
+  const colorScale = d3.scaleLinear()
+    .domain([Math.min(...colorArray), Math.max(...colorArray)])
+    .range(["#00ff00", "#0000ff"]); // Specify the color range
+
+  // Create an object with kantons and their corresponding colors
+    const color = colorScale(value);
+
+  return color.toString()
+}
+
 function drawMap(map, data) {
     let projection = d3.geoIdentity().reflectY(true).fitSize([width*0.9, height*0.9], map);// The projection determines what kind of plane the map itself is projected on to (eg. onto a globe or a flat plain).
     let path = d3.geoPath().projection(projection); // Create the path for the projection
@@ -67,7 +81,12 @@ function drawMap(map, data) {
             .attr("class", "canton")
             .attr("id", function(d) { return d.properties.KantonId; })
             .attr("d", path)
-            .style("fill", "grey") // Set the background color of the Kantons
+            .style("fill", function (d) {
+                let colorArray = [];
+                for (let i = 0; i < map.features.length; i++) {
+                    const variable = map.features[i].properties.details.t0sex.Female;
+                    colorArray.push(variable);}
+                    return transformValuesToColors(colorArray, d.properties.details.t0sex.Female) })
             .style("stroke", "white") // Set the color of the Kanton Borders
             .style("stroke-width", 0.5) // Thickness of the borderlines
             .style("z-index", "1")
@@ -78,8 +97,8 @@ function drawMap(map, data) {
 
 // Updates the map if the variables change.
 function updateMap(data, map, select) {
-    let dataByKanton = Array.apply(null, Array(27)).map(function (x) { 
-        return getValues(); 
+    let dataByKanton = Array.apply(null, Array(27)).map(function (x) {
+        return getValues();
     });
     
     setSelect(select);
