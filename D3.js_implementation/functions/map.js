@@ -1,4 +1,4 @@
-let select = [];
+let select;
 let text;
 
 // Renders the map and can then add the TREE-Data to it.
@@ -81,7 +81,7 @@ function updateMap(data, map, select) {
     let dataByKanton = {};
     let values = getValues();
     
-    addSelect(select);
+    setSelect(select);
 
     dataByKanton = Array.apply(null, Array(27)).map(function (x) { return values; });
 
@@ -143,27 +143,15 @@ function prepareMapData(map, dataByKanton) {
 
 function createLabel(mapData, select) {
     let label = "<p><b>" + mapData.properties.KantonName_de + " (" + mapData.properties.alternateName + ")</b></p>";
+    let details = mapData.properties.details[select];
 
-    select.forEach(function(s) {
-        let details = mapData.properties.details[s];
-    
-        for (let key in details) {
-            label += "<p><b>" + key + ":</b> " + details[key] + "</p>";
-        }
-    })
+    for (let key in details) {
+        label += "<p><b>" + key + ":</b> " + details[key] + "</p>";
+    }
     
     return label;    
 }
 
-function addSelect(newSelect) {
-    if (!select.includes(newSelect)){
-        select.push(newSelect);
-    }
-}
-
-function removeSelect(newSelect) {
-    if (select.includes(newSelect)){
-        let i = select.indexOf(newSelect);
-        select.splice(i);
-    }
+function setSelect(newSelect) {
+    select = newSelect;
 }

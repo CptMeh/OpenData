@@ -10,15 +10,14 @@ function addChecks(labels) {
                         .attr("class", "form-check");
 
         check = div.append("input")
-                    .attr("type","checkbox")
+                    .attr("type","radio")
                     .attr("class", "form-check-input")
+                    .attr("name", "radio-group")
                     .attr("value", labels[i]["label"])
                     .attr("id", labels[i]["label"])
                     .on("change", function() {
                         if (this.checked) {
-                            addSelect(this.value);
-                        } else {
-                            removeSelect(this.value);
+                            setSelect(this.value);
                         }
                     });
         
