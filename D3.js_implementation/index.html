@@ -13,83 +13,76 @@
 </head>
 
 <body>
-  <div id="main" class="container">
-  </br>
     <!--Navbar-->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand px-2" href="#">TREE-Visualisierung</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Übersicht</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Map</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Benutzte Daten</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Dropdown links
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </nav>
-    <!--Navbar-->
-  </br>
-    <h1>Visualierung der TREE-Studie, Kohorte 2 - kantonal</h1>
-  </br>
-
-  <div id="map-card" class="mb-5 row map-card">
-
-    <!--Check List-->
-    <div id="var-check" class="mb-5  col-6">
-        <h4>Variablen:</h4>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand px-2" href="#">TREE-Visualisierung</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Übersicht</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Map</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Benutzte Daten</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Dropdown links
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+      </ul>
     </div>
-    <!--Check List-->
+  </nav>
+  <!--Navbar-->
 
-    <!--Map-->
-    <div id="map" class="col"></div>
-    <!--Map-->
-  </div>
+  <div id="main" class="container mb-3">
 
   </br>
 
-  <div class="card p-5 mb-5 component">
-    <h2>Beschreibung</h2>
-    <p>Beschreibungstext hier!</p>
+    <h1 class="p-1 mt-5">Visualierung der TREE-Studie, Kohorte 2 - kantonal</h1>
 
+    <div id="map-card" class="row map-card">
+      <!--Check List-->
+      <div id="var-check" class="mb-3 col-6">
+          <h4>Variablen:</h4>
+      </div>
+      <!--Check List-->
+
+      <!--Map-->
+      <div id="map" class="col"></div>
+      <!--Map-->
+    </div>
+
+    <div class="card p-3 mb-3 component">
+      <h2>Beschreibung</h2>
+      <p>Beschreibungstext hier!</p>
+    </div>
+
+    <div class="card p-3 mb-3 component">
+      <h2>Links</h2>
+      <p>Links zu verwendeten Daten hier!</p>
+    </div>
+
+    <div class="card p-3 mb-3 component">
+      <h2>Developers</h2>
+      <p>Marlene Kulowatz ...</p>
+      <p>Ramon Näf ...</p>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="./functions/map.js"></script>
+    <script src="./functions/checklist.js"></script>
   </div>
-
-  <div class="card p-5 mb-5 component">
-    <h2>Links</h2>
-    <p>Links zu verwendeten Daten hier!</p>
-
-  </div>
-
-  <div class="card p-5 mb-5 component">
-    <h2>Developers</h2>
-    <p>Marlene Kulowatz ...</p>
-    <p>Ramon Näf ...</p>
-
-  </div>
-  </div>
-  <script src="app.js"></script>
-  <script src="./functions/map.js"></script>
-  <script src="./functions/checklist.js"></script>
-
-
-</div>
 </body>
 
 </html>

@@ -30,8 +30,8 @@ function drawMap(map, data) {
     let mouseclick = function(d) {
         // Adds the text to the tooltip and updates the position on where the mouse is.
         tooltip.html(createLabel(d, select))
-        .style("left", (d3.event.pageX - 800 + 800) + "px")
-        .style("top", (d3.event.pageY - 800 + 800) + "px");
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY) + "px");
       
         if (current === this && clicked) {
             tooltip.style("opacity", 0.0) // make tooltip visible
