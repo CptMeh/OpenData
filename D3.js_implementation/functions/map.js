@@ -78,12 +78,11 @@ function drawMap(map, data) {
 
 // Updates the map if the variables change.
 function updateMap(data, map, select) {
-    let dataByKanton = {};
-    let values = getValues();
+    let dataByKanton = Array.apply(null, Array(27)).map(function (x) { 
+        return getValues(); 
+    });
     
     setSelect(select);
-
-    dataByKanton = Array.apply(null, Array(27)).map(function (x) { return values; });
 
     data.forEach(function (d) {
         prepareData(d, dataByKanton);
@@ -134,10 +133,10 @@ function prepareData(dataVar, dataByKanton) {
 
 function prepareMapData(map, dataByKanton) {
     map.features.forEach(function (d) {
-        let p = d.properties;
-
-        d.properties.details = dataByKanton[p.KantonId];
+        d.properties.details = dataByKanton[d.properties.KantonId];
     });
+
+    //console.log(map.features[0].properties.details)
 }
 
 
