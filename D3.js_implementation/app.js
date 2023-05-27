@@ -4,11 +4,12 @@ const height = 800;
 // let language = ...;
 
 // Add an SVG to the div with the ID 'map' and then sets its height and width.
-const svg = d3.select("#map")
+let svg = d3.select("#map")
               .append("svg")
               .attr("width", width)
               .attr("height", height)
-              .attr("preserveAspectRatio", "xMinYMax"); 
+              .attr("preserveAspectRatio", "xMinYMax")
+              .style("float", "right"); 
 
 // Get the map- and TREE-data and check if everything worked. Then use the drawMap function to render the map.
 d3.queue()
@@ -16,7 +17,7 @@ d3.queue()
   .defer(d3.json, "https://data.geo.admin.ch/ch.bafu.landesforstinventar-kantone/landesforstinventar-kantone/landesforstinventar-kantone_2056.geojson")
   
   // This one is the TREE-Data
-  .defer(d3.csv, "https://raw.githubusercontent.com/CptMeh/OpenData/main/Daten/TREE2_Data_IWI_Open_Data_Vorlesung_2023_nolabel.csv")
+  .defer(d3.csv, "https://raw.githubusercontent.com/CptMeh/OpenData/ramon/D3.js_implementation/Daten/currated_data.csv")
 
   // Geting the labels for the TREE-Data
   .defer(d3.csv, "https://raw.githubusercontent.com/CptMeh/OpenData/ramon/D3.js_implementation/Daten/labels.csv")

@@ -17,8 +17,7 @@ function addChecks(labels) {
                     .attr("id", labels[i]["label"])
                     .on("change", function() {
                         if (this.checked) {
-                            console.log(this.value)
-                            updateMap(this.value);
+                            setSelect(this.value);
                         }
                     });
         

@@ -1,8 +1,24 @@
+#main {
+
+}
+
 #map {
-  height: 750px;
+  height: 700px;
   width: 850px;
   overflow:scroll; 
-  float: left;
+  float: right;
+}
+
+#map-card {
+  height: 750px;
+  width:960px;
+  margin-left:auto;
+  margin-right:auto;
+  overflow:scroll; 
+  padding-top: 30px;
+  padding-right: 30px;
+  padding-bottom: 30px;
+  padding-left: 30px;
 }
 
 .tooltip {
@@ -15,7 +31,6 @@
   z-index: 1;
   position: absolute;
 }
-
 
 .navbar {
   border-radius: 5px;

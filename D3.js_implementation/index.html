@@ -13,7 +13,7 @@
 </head>
 
 <body>
-  <div class="container">
+  <div id="main" class="container">
   </br>
     <!--Navbar-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -46,41 +46,43 @@
       </div>
     </nav>
     <!--Navbar-->
-
   </br>
-    
-    <h2>Visulaisierung der TREE2 Studie</h2>
-
+    <h2>Visualierung der TREE-Studie, Kohorte 2 - kantonal</h2>
   </br>
 
   <div id="map-card" class="card row p-5 mb-5">
-    <div id="var-check" class="card col-6 position-left">
+
+    <!--Check List-->
+    <div id="var-check" class="col-6 check">
         <h4>Variablen:</h4>
     </div>
-    
-    <div id="map" class="card col-9 position-right"></div>
-  </div>
+    <!--Check List-->
+
     <!--Map-->
+    <div id="map" class="card col-9"></div>
+    <!--Map-->
+  </div>
+    
   </br>
 
-    <div class="card p-5 mb-5">
-      <h2>Beschreibung</h2>
-      <p>Beschreibungstext hier!</p>
+  <div class="card p-5 mb-5">
+    <h2>Beschreibung</h2>
+    <p>Beschreibungstext hier!</p>
 
-    </div>
+  </div>
 
-    <div class="card p-5 mb-5">
-      <h2>Links</h2>
-      <p>Links zu verwendeten Daten hier!</p>
+  <div class="card p-5 mb-5">
+    <h2>Links</h2>
+    <p>Links zu verwendeten Daten hier!</p>
 
-    </div>
+  </div>
 
-    <div class="card p-5 mb-5">
-      <h2>Developers</h2>
-      <p>Marlene Kulowatz ...</p>
-      <p>Ramon Näf ...</p>
+  <div class="card p-5 mb-5">
+    <h2>Developers</h2>
+    <p>Marlene Kulowatz ...</p>
+    <p>Ramon Näf ...</p>
 
-    </div>
+  </div>
   </div>
   <script src="app.js"></script>
   <script src="./functions/map.js"></script>

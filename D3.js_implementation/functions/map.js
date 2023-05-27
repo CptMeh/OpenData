@@ -1,15 +1,12 @@
-let map;
-let data;
+let select;
 let text;
 
 // Renders the map and can then add the TREE-Data to it.
-function drawMap(m, d) {
-    map = m;
-    data = d;
+function drawMap(map, data) {
     let projection = d3.geoIdentity().reflectY(true).fitSize([width*0.9, height*0.9], map);// The projection determines what kind of plane the map itself is projected on to (eg. onto a globe or a flat plain).
-    let path = d3.geoPath().projection(projection);
+    let path = d3.geoPath().projection(projection); // Create the path for the projection
     
-    updateMap("t0sex"); // Prepare the data that should be rendered (decided by user via selection panel)
+    updateMap(data, map, "t0sex"); // Prepare the data that should be rendered (decided by user via selection panel)
 
     let tooltip = d3.select("#map")
                     .append("div")
@@ -26,15 +23,11 @@ function drawMap(m, d) {
                     .style("pointer-events", "none"); /*This makes the tooltip unclickable, so it doesn't block the canton behind it, once it is made invisible again. 
                                                         However, this hinders the user from copying the info in the box, not very handy :/ */
 
-    let color = d3.scaleSequential()
-                    .interpolator(d3.interpolateInferno)
-                    .domain([1,100]);
-
     let current = null; // for enabling toggling of the tooltip box
     let clicked = false;
     let mouseclick = function(d) {
         // Adds the text to the tooltip and updates the position on where the mouse is.
-        tooltip.html(createLabel(d))
+        tooltip.html(createLabel(d, select))
                 .style("left", (d3.mouse(this)[0]) + "px")
                 .style("top", (d3.mouse(this)[1]) + "px");
 
@@ -82,27 +75,38 @@ function drawMap(m, d) {
 }
 
 // Updates the map if the variables change.
-function updateMap(select) {
+function updateMap(data, map, select) {
     let dataByKanton = {};
     let values = {};
+    
+    setSelect(select);
 
-    values = getValues(dataByKanton, select);
+    values = getValues();
 
     dataByKanton = Array.apply(null, Array(27)).map(function (x) { return values; });
 
     data.forEach(function (d) {
-        prepare(d, dataByKanton, select, values);
+        prepareData(d, dataByKanton);
     });
 
     prepareMapData(map, dataByKanton);
 }
 
 
-function getValues(dataByKanton, select) {
+function getValues() {
+    return {"t0sex": { "Female": 0, "Male": 0, other: 0,}, // Gender
+            "t0immig" : { 1: 0, 2: 0, 3: 0, other: 0,}, // Immigration status
+            //"t0fmedu_comp" : {compusory_school: 0, upper_secondary: 0, tertiary: 0, other: 0,}, // Parents' highest educational attainment [composite]
+            "aes_langreg": { 1: 0, 2: 0, 3: 0, other: 0,}, // Language region 
+            "t0hisei08_3q": { 1: 0, 2: 0, 3: 0, other: 0, }, // Parental socioeconomic status level (tercile)
+            "t0wlem_3q": { 1: 0, 2: 0, 3: 0, other: 0, }, // Math score level (tercile)
+            "t0st_nprog_req3": { 1: 0, 2: 0, 3: 0, other: 0, }, // National school programme (requirements)
+            "t1educ_class_1_r": {}}; // Educational status t1
+            // Achtung!: t2 und t3 fehlen!!!!
+
+    /*
     switch (select) {
         case "t0sex": return { both: 0, 1: 0, 2: 0, };  // Gender
-
-
         case "t0immig" : return { both: 0, 1: 0, 2: 0, 3: 0, other: 0,}; // Immigration status
         //case "t0fmedu_comp" : prepare(d, dataByKanton, kanton, "t0fmedu_comp", {compusory_school: 0, upper_secondary: 0, tertiary: 0, other: 0,}); break; // Parents' highest educational attainment [composite]
         case "aes_langreg": return { 1: 0, 2: 0, 3: 0, other: 0,};  // Language region 
@@ -112,20 +116,30 @@ function getValues(dataByKanton, select) {
         case "t1educ_class_1_r": ; // Educational status t1
         case "t2educ_class_1_r": ; // Educational status t2
         case "t3educ_class_1_r": return ; // Educational status t3
-        default: console.log("no"); return {};
-    }
+        default: return {other: 0,};
+    }*/
 }
 
-function prepare(d, dataByKanton, select, values) {
-    let variable = d[select];
-    let kanton = d["aes_canton"];
+function prepareData(dataVar, dataByKanton) {
+    let id = dataVar["aes_canton"];
+    let vars = ["t0sex", "t0immig", "aes_langreg", "t0hisei08_3q", "t0wlem_3q", "t0st_nprog_req3", "t1educ_class_1_r"];
+    
+    vars.forEach(function(i){
+        /*switch (dataVar[i]) {
+            case "1" : dataByKanton[id][i]["1"] += 1; break;
+            case "2" : dataByKanton[id][i]["2"] += 1; break;
+            case "3" : dataByKanton[id][i]["3"] += 1; break;
+            default : dataByKanton[id][i].other += 1;
+        }*/
+        console.log(i)
 
-    if (values.hasOwnProperty(variable)) {
-        dataByKanton[kanton][variable] += 1;
-    } else {
-        dataByKanton[kanton].other += 1;
-    }
-    //text = createLabel(d, select);
+        console.log(dataVar[i])
+        if (dataByKanton[id][i].hasOwnProperty(dataVar[i])) {
+            dataByKanton[id][i][dataVar[i]] += 1;
+        } else {
+            dataByKanton[id][i].other += 1;
+        }
+    });
 }
 
 function prepareMapData(map, dataByKanton) {
@@ -137,27 +151,16 @@ function prepareMapData(map, dataByKanton) {
 }
 
 
-function createLabel(d) {
-    let details = d.properties.details;
-    let label = "<p><b>" + d.properties.KantonName_de + " (" + d.properties.alternateName + ")</b></p>";
-    let select = "t0immig";
+function createLabel(mapData, select) {
+    let details = mapData.properties.details[select];
 
-    switch(select) {
-        case "t0sex" :  label += "<p>" + "Gesammt: " + (details["1"] + details["1"]) + "</p>" +
-                                "<p>" + "Weiblich: " + details["1"] + "</p>" +
-                                "<p>" + "Männlich: " + details["2"] + "</p>"; 
-                        break;
-        case "t0immig": label += "<p>" + "Immigrationstatus 1: " + details.immigration_1 + "</p>" +
-                                "<p>" + "Immigrationstatus 2: " + details.immigration_2 + "</p>" +
-                                "<p>" + "Immigrationstatus 3: " + details.immigration_3 + "</p>" +
-                                "<p>" + "Percent Immigration 1: " + details.percent_immigration_1 + "</p>" +
-                                "<p>" + "Percent Immigration 2: " + details.percent_immigration_2 + "</p>" +
-                                "<p>" + "Percent Immigration 3: " + details.percent_immigration_3 + "</p>"; 
-                        break; 
-        default : break;
+    let label = "<p><b>" + mapData.properties.KantonName_de + " (" + mapData.properties.alternateName + ")</b></p>";
+
+    for (let property in details) {
+        label += "<p>" + property + ": " + (details["1"] + details["2"]) + "</p>";
     }
 
-    return label;
+    return label;    
 }
 
 function prepareImmigration(d, dataByKanton, kanton) {
@@ -185,41 +188,7 @@ function prepareImmigration(d, dataByKanton, kanton) {
     dataByKanton[kanton].percent_immigration_3 = (100 / total_immigration_weighted) * dataByKanton[kanton].immigration_3;
 }
 
-function prepareParentsEdjuation(d, dataByKanton, kanton) {
-    let education = d["t0fmedu_comp"];
 
-    dataByKanton[kanton] = assignVariables(dataByKanton[kanton], {compusory_school: 0, upper_secondary: 0, tertiary: 0, other: 0,});
-
-    switch (education) {
-        case "Compulsory schooling only" : dataByKanton[kanton].compusory_school += 1; break;
-        case "Upper secondary education" : dataByKanton[kanton].upper_secondary += 1; break;
-        case "Tertiary education" : dataByKanton[kanton].tertiary += 1; break;
-        default : dataByKanton[kanton].other += 1; break;
-    }
-}
-
-function prepareParentsSES(d, dataByKanton, kanton) {
-    let parentsSES = d["t0hisei08_3q"];
-
-    dataByKanton[kanton] = assignVariables(dataByKanton[kanton], {Low: 0, Medium: 0, High: 0, other: 0,});
-
-    switch (parentsSES) {
-        case "Low" : dataByKanton[kanton].low += 1; break;
-        case "Medium" : dataByKanton[kanton].medium += 1; break;
-        case "High" : dataByKanton[kanton].high += 1; break;
-        default : dataByKanton[kanton].other += 1; break;
-    }
-}
-
-function prepareMathScore(d, dataByKanton, kanton) {
-    let parentsSES = d["t0hisei08_3q"];
-
-    dataByKanton[kanton] = assignVariables(dataByKanton[kanton], {low: 0, medium: 0, high: 0, other: 0,});
-
-    switch (parentsSES) {
-        case "Low" : dataByKanton[kanton].low += 1; break;
-        case "Medium" : dataByKanton[kanton].medium += 1; break;
-        case "High" : dataByKanton[kanton].high += 1; break;
-        default : dataByKanton[kanton].other += 1; break;
-    }
+function setSelect(newSelect) {
+    select = newSelect;
 }
