@@ -1,4 +1,4 @@
-let select;
+let select = [];
 let text;
 
 // Renders the map and can then add the TREE-Data to it.
@@ -81,7 +81,7 @@ function updateMap(data, map, select) {
     let dataByKanton = {};
     let values = getValues();
     
-    setSelect(select);
+    addSelect(select);
 
     dataByKanton = Array.apply(null, Array(27)).map(function (x) { return values; });
 
@@ -101,13 +101,16 @@ function getValues() {
             "t0hisei08_3q": {"Low": 0, "Medium": 0, "High": 0}, // Parental socioeconomic status level (tercile)
             "t0wlem_3q": {"Low": 0, "Medium": 0, "High": 0}, // Math score level (tercile)
             "t0st_nprog_req3": {"High requirements": 0, "Advanced requirements & Alternative/non-assignable study programme": 0, "Basic/low requirements": 0}, // National school programme (requirements)
-            "t1educ_class_1_r": {}}; // Educational status t1
-            // Achtung!: t2 und t3 fehlen!!!!
+            "t1educ_class_1_r": {"NET": 0, "Internship": 0, "10th school year": 0,"Other intermediate solution": 0, "2 years VET": 0, "3-4 years VET": 0, "Vocational baccalaureate //VET": 0, "General baccalaureate": 0, "Other general education programme (specialized middle school, Waldorf)": 0}, // Educational status t1
+            "t2educ_class_1_r": {"NET": 0, "Internship": 0, "10th school year": 0,"Other intermediate solution": 0, "2 years VET": 0, "3-4 years VET": 0, "Vocational baccalaureate //VET": 0, "General baccalaureate": 0, "Other general education programme (specialized middle school, Waldorf)": 0}, // Educational status t2
+            "t3educ_class_1_r": {"NET": 0, "Internship": 0, "10th school year": 0,"Other intermediate solution": 0, "2 years VET": 0, "3-4 years VET": 0, "Vocational baccalaureate //VET": 0, "General baccalaureate": 0, "Other general education programme (specialized middle school, Waldorf)": 0}}; // Educational status t3
+
 }
 
 function prepareData(dataVar, dataByKanton) {
     let id = dataVar["aes_canton"];
-    let vars = ["t0sex", "t0immig", "t0fmedu_comp", "aes_langreg", "t0hisei08_3q", "t0wlem_3q", "t0st_nprog_req3", "t1educ_class_1_r"];
+    let vars = ["t0sex", "t0immig", "t0fmedu_comp", "aes_langreg", "t0hisei08_3q", "t0wlem_3q", "t0st_nprog_req3"];
+    let wheightet = ["t1educ_class_1_r", "t2educ_class_1_r", "t3educ_class_1_r"];
 
     vars.forEach(function(i){
         if (dataByKanton[id][i].hasOwnProperty(dataVar[i])) {
@@ -115,6 +118,17 @@ function prepareData(dataVar, dataByKanton) {
         } else {
             dataByKanton[id][i].other += 1;
         }
+    });
+
+    wheightet.forEach(function(i){
+        if (dataByKanton[id][i].hasOwnProperty(dataVar[i])) {
+            switch (i) {
+                case "t1educ_class_1_r" : dataByKanton[id]["t1educ_class_1_r"][dataVar[i]] += 1 * dataVar["t1wt"]; break;
+                case "t2educ_class_1_r" : dataByKanton[id]["t1educ_class_1_r"][dataVar[i]] += 1 * dataVar["t2wt"]; break;
+                case "t3educ_class_1_r" : dataByKanton[id]["t1educ_class_1_r"][dataVar[i]] += 1 * dataVar["t3wt"]; break;
+                                                           // Temp. all to t1
+            }
+        } 
     });
 }
 
@@ -128,14 +142,16 @@ function prepareMapData(map, dataByKanton) {
 
 
 function createLabel(mapData, select) {
-    let details = mapData.properties.details[select];
-
     let label = "<p><b>" + mapData.properties.KantonName_de + " (" + mapData.properties.alternateName + ")</b></p>";
 
-    for (let key in details) {
-        label += "<p>" + key + ": " + details[key] + "</p>";
-    }
-
+    select.forEach(function(s) {
+        let details = mapData.properties.details[s];
+    
+        for (let key in details) {
+            label += "<p><b>" + key + ":</b> " + details[key] + "</p>";
+        }
+    })
+    
     return label;    
 }
 
@@ -168,6 +184,15 @@ function prepareImmigration(d, dataByKanton, kanton) {
 }*/
 
 
-function setSelect(newSelect) {
-    select = newSelect;
+function addSelect(newSelect) {
+    if (!select.includes(newSelect)){
+        select.push(newSelect);
+    }
+}
+
+function removeSelect(newSelect) {
+    if (select.includes(newSelect)){
+        let i = select.indexOf(newSelect);
+        select.splice(i);
+    }
 }
