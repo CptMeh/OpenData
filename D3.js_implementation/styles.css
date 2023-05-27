@@ -1,24 +1,32 @@
-#main {
-
+.body {
+  overflow: scroll; 
 }
 
-#map {
-  height: 700px;
-  width: 850px;
-  overflow:scroll; 
-  float: right;
-}
-
-#map-card {
-  height: 750px;
-  width:960px;
+.map-card {
+  height: 850px;
+  width: 1320x;
   margin-left:auto;
   margin-right:auto;
-  overflow:scroll; 
   padding-top: 30px;
   padding-right: 30px;
   padding-bottom: 30px;
   padding-left: 30px;
+}
+
+#map {
+  height: 500px;
+  width: 50px;
+}
+
+#var-check {
+  height: 400px;
+  width: 400px;
+  float: left;
+}
+
+.component {
+  height:100%;
+  width:100%;
 }
 
 .tooltip {
@@ -28,8 +36,8 @@
   border-radius: "5px";
   padding: "5px";
   opacity: 0;
-  z-index: 1;
   position: absolute;
+  overflow: scroll;
 }
 
 .navbar {

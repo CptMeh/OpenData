@@ -1,5 +1,5 @@
-const width = 800; 
-const height = 800; 
+const width = 900; 
+const height = 900; 
 // Maybe language?
 // let language = ...;
 
@@ -8,8 +8,8 @@ let svg = d3.select("#map")
               .append("svg")
               .attr("width", width)
               .attr("height", height)
-              .attr("preserveAspectRatio", "xMinYMax")
-              .style("float", "right"); 
+              .attr("preserveAspectRatio", "xMaxYMax")
+              .attr("overflow", "scroll"); 
 
 // Get the map- and TREE-data and check if everything worked. Then use the drawMap function to render the map.
 d3.queue()
