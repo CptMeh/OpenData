@@ -24,6 +24,30 @@
   float: left;
 }
 
+#end-card {
+  background-color: #555;
+  padding: "5px";
+}
+
+#dev {
+  text-align: left;
+  color: lightgray;
+}
+
+#tree {
+  text-align: right;
+  color: lightgray;
+}
+
+#git {
+  text-align: center;
+  color: lightgray;
+}
+
+.small {
+  font-size: 14px;
+}
+
 .component {
   height: 850px;
   width: 1320x;

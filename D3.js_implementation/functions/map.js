@@ -155,35 +155,6 @@ function createLabel(mapData, select) {
     return label;    
 }
 
-/* maybe need the weights for reference!!!!!!
-
-
-function prepareImmigration(d, dataByKanton, kanton) {
-    let immigration = d["t0immig"]; // immigration status (1 - native, 2 - second gen, 3 - first gen, . - missing)
-    let IPW1 = d["t1wt"]; // Inverse Probability Weight - Wave 1
-
-    dataByKanton[kanton] = assignVariables(dataByKanton[kanton], {immigration_1: 0, immigration_2: 0, immigration_3: 0});
-    dataByKanton["sum"] = assignVariables(dataByKanton["sum"], {immigration_1: 0, immigration_2: 0, immigration_3: 0});
-
-    switch (immigration) {
-        case "Native (at least 1 parent born in Switzerland)": dataByKanton[kanton].immigration_1 += 1 * IPW1;
-        case "Second generation (respondent born in Switzerland, no parent born in Switzerland)": dataByKanton[kanton].immigration_2 += 1 * IPW1;
-        case "First generation (respondent and parent(s) born abroad)": dataByKanton[kanton].immigration_3 += 1 * IPW1;
-        case ".": dataByKanton[kanton].immigration_4 += 1 * IPW1;
-    }
-
-    // needed for converting the totals to percent
-    total_immigration_weighted = dataByKanton[kanton].immigration_1 
-                                    + dataByKanton[kanton].immigration_2 
-                                    + dataByKanton[kanton].immigration_3 
-                                    + dataByKanton[kanton].immigration_4;
-
-    dataByKanton[kanton].percent_immigration_1 = (100 / total_immigration_weighted) * dataByKanton[kanton].immigration_1;
-    dataByKanton[kanton].percent_immigration_2 = (100 / total_immigration_weighted) * dataByKanton[kanton].immigration_2;
-    dataByKanton[kanton].percent_immigration_3 = (100 / total_immigration_weighted) * dataByKanton[kanton].immigration_3;
-}*/
-
-
 function addSelect(newSelect) {
     if (!select.includes(newSelect)){
         select.push(newSelect);
