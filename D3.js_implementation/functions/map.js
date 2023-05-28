@@ -9,7 +9,6 @@ function createColorArray(d, select){
         case "t0sex" :
             for (let i = 0; i < d.length; i++) {
                 const variable = d[i].properties.details.t0sex.Male;
-                console.log("V" + variable);
                 colorArray.push(variable);
             }
         case "t0immig" :
@@ -22,7 +21,6 @@ function createColorArray(d, select){
                 const variable = d[i].properties.details.t0fmedu_comp["Upper secondary education"];
                 colorArray.push(variable);
             }
-            console.log("coloArray: " + colorArray);
     }
     return colorArray;
 }
@@ -115,6 +113,7 @@ function drawMap(map, data) {
             .attr("id", function(d) { return d.properties.KantonId; })
             .attr("d", path)
             .style("fill", function (d) {
+                console.log(d);
                 let input = map.features;
                 let colorArray = createColorArray(input, select);
                     return transformValuesToColors(colorArray, d, select) })
