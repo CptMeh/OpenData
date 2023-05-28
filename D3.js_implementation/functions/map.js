@@ -7,7 +7,7 @@ function drawMap(map, data) {
     let path = d3.geoPath().projection(projection); // Create the path for the projection
     
 
-    updateMap(data, map, "t0sex"); // Prepare the data that should be rendered (decided by user via selection panel)
+    updateMap(data, map); // Prepare the data that should be rendered (decided by user via selection panel)
 
     let tooltip = d3.select("#map")
                     .append("div")
@@ -77,20 +77,15 @@ function drawMap(map, data) {
 }
 
 // Updates the map if the variables change.
-function updateMap(data, map, select) {
-    let dataByKanton = Array.apply(null, Array(27)).map(function (x) { 
-        return getValues(); 
-    });
+function updateMap(data, map) {
+    let dataByKanton = Array.apply(null, Array(27)).map(function (x) { return getValues(); });
     
-    setSelect(select);
-
     data.forEach(function (d) {
         prepareData(d, dataByKanton);
     });
 
     prepareMapData(map, dataByKanton);
 }
-
 
 function getValues() {
     return {"t0sex": {"Female": 0, "Male": 0}, // Gender
