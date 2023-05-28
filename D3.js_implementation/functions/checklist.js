@@ -29,4 +29,6 @@ function addChecks(labels) {
             .attr("for", labels[i]["label"])
             .html("<p>"+labels[i]["name"]+"</p>");
     }
+
+    setSelect("t0sex");
 }

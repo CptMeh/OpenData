@@ -54,7 +54,7 @@ function drawMap(map, data) {
     let path = d3.geoPath().projection(projection); // Create the path for the projection
     
 
-    updateMap(data, map, "t0sex"); // Prepare the data that should be rendered (decided by user via selection panel)
+    updateMap(data, map); // Prepare the data that should be rendered (decided by user via selection panel)
 
     let tooltip = d3.select("#map")
                     .append("div")
@@ -79,7 +79,7 @@ function drawMap(map, data) {
         tooltip.html(createLabel(d, select))
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY) + "px");
-
+      
         if (current === this && clicked) {
             tooltip.style("opacity", 0.0) // make tooltip visible
                     .style("z-index", "0"); // make it go behind the cantons, so it doesn't block them
@@ -127,12 +127,8 @@ function drawMap(map, data) {
 }
 
 // Updates the map if the variables change.
-function updateMap(data, map, select) {
-    let dataByKanton = Array.apply(null, Array(27)).map(function (x) {
-        return getValues();
-    });
-    
-    setSelect(select);
+function updateMap(data, map) {
+    let dataByKanton = Array.apply(null, Array(27)).map(function (x) { return getValues(); });
 
     data.forEach(function (d) {
         prepareData(d, dataByKanton);
@@ -140,7 +136,6 @@ function updateMap(data, map, select) {
 
     prepareMapData(map, dataByKanton);
 }
-
 
 function getValues() {
     return {"t0sex": {"Female": 0, "Male": 0}, // Gender
