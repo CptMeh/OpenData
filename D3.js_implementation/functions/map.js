@@ -3,12 +3,45 @@ let text;
 
 // Renders the map and can then add the TREE-Data to it.
 
-function transformValuesToColors(colorArray, value) {
+function createColorArray(d, select){
+    const colorArray = [];
+    switch (select) {
+        case "t0sex" :
+            for (let i = 0; i < d.length; i++) {
+                const variable = d[i].properties.details.t0sex.Male;
+                console.log("V" + variable);
+                colorArray.push(variable);
+            }
+        case "t0immig" :
+            for (let i = 0; i < d.length; i++) {
+                const variable = d[i].properties.details.t0immig["Native (at least 1 parent born in Switzerland)"];
+                colorArray.push(variable);
+            }
+        case "t0fmedu_comp" :
+            for (let i = 0; i < d.length; i++) {
+                const variable = d[i].properties.details.t0fmedu_comp["Upper secondary education"];
+                colorArray.push(variable);
+            }
+            console.log("coloArray: " + colorArray);
+    }
+    return colorArray;
+}
+
+function transformValuesToColors(colorArray, d, select) {
 
     // Define the color scale
   const colorScale = d3.scaleLinear()
     .domain([Math.min(...colorArray), Math.max(...colorArray)])
     .range(["#00ff00", "#0000ff"]); // Specify the color range
+   // console.log("colorArrayMin" + Math.max(...colorArray));
+   // console.log(colorArray);
+    let value = 0;
+
+    switch (select) {
+        case "t0sex" : value = d.properties.details.t0sex.Male; break;
+        case "t0immig" : value = d.properties.details.t0immig.percent_native; break;
+        case "t0fmedu_comp" : value = d.properties.details.t0fmedu_comp["Upper secondary education"]; break;
+    }
 
   // Create an object with kantons and their corresponding colors
     const color = colorScale(value);
@@ -46,7 +79,7 @@ function drawMap(map, data) {
         tooltip.html(createLabel(d, select))
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY) + "px");
-      
+
         if (current === this && clicked) {
             tooltip.style("opacity", 0.0) // make tooltip visible
                     .style("z-index", "0"); // make it go behind the cantons, so it doesn't block them
@@ -82,11 +115,9 @@ function drawMap(map, data) {
             .attr("id", function(d) { return d.properties.KantonId; })
             .attr("d", path)
             .style("fill", function (d) {
-                let colorArray = [];
-                for (let i = 0; i < map.features.length; i++) {
-                    const variable = map.features[i].properties.details.t0sex.Female;
-                    colorArray.push(variable);}
-                    return transformValuesToColors(colorArray, d.properties.details.t0sex.Female) })
+                let input = map.features;
+                let colorArray = createColorArray(input, select);
+                    return transformValuesToColors(colorArray, d, select) })
             .style("stroke", "white") // Set the color of the Kanton Borders
             .style("stroke-width", 0.5) // Thickness of the borderlines
             .style("z-index", "1")
@@ -153,9 +184,15 @@ function prepareData(dataVar, dataByKanton) {
 function prepareMapData(map, dataByKanton) {
     map.features.forEach(function (d) {
         d.properties.details = dataByKanton[d.properties.KantonId];
+        calculatePercentages(d.properties.details);
     });
+}
 
-    //console.log(map.features[0].properties.details)
+function calculatePercentages(d){
+    d.t0sex.percent_female = (100/(d.t0sex.Female + d.t0sex.Male))*d.t0sex.Female;
+    d.t0sex.percent_male = (100/(d.t0sex.Female + d.t0sex.Male))*d.t0sex.Male;
+    d.t0immig.percent_native = (100/(d.t0immig["Native (at least 1 parent born in Switzerland)"] + d.t0immig["Second generation (respondent born in Switzerland, no parent born in Switzerland)"] + d.t0immig["First generation (respondent and parent(s) born abroad)"]))*d.t0immig["Native (at least 1 parent born in Switzerland)"];
+       // d.properties.details.t0sex.percent_male = (100/(d.properties.details.t0sex.Female + d.properties.details.t0sex.Male))*d.properties.details.t0sex.Male;
 }
 
 
