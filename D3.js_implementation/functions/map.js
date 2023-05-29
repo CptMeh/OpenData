@@ -1,9 +1,9 @@
 let select, subselect, text;
-let cantons, path;
+
 // Renders the map and can then add the TREE-Data to it.
 function drawMap(map, data) {
     let projection = d3.geoIdentity().reflectY(true).fitSize([width*0.9, height*0.9], map);// The projection determines what kind of plane the map itself is projected on to (eg. onto a globe or a flat plain).
-    path = d3.geoPath().projection(projection); // Create the path for the projection
+    let path = d3.geoPath().projection(projection); // Create the path for the projection
     
     setSelected("t0sex", "Female");
     connectDataToMap(data, map); // Prepare the data that should be rendered
@@ -44,7 +44,7 @@ function drawMap(map, data) {
         current = this;
     };
 
-    let mouseover = function(d) {
+    let mouseover = function(d)  {
         // Highlight selected part
         d3.select(this) 
         .style("stroke", "white")
@@ -71,30 +71,71 @@ function drawMap(map, data) {
         .on("mouseleave", mouseleave);
 
     colorMap();
+    addColorScale();
 }
 
 function colorMap() {
-    d3.selectAll("path").style("fill", function (d) { return createColorArray(d)});
+    d3.selectAll("path")
+        .style("fill", function(d) { return createColorArray(d)})
+        .style("stroke", "white")
+        .style("stroke-width", 0.5);;
+
 }
 
 function createColorArray(d){
-    const inPercent = percent(d.properties.details[select]);
+    const inPercent = percentage(d.properties.details[select]);
 
     // Define the color scale
     const colorScale = d3.scaleLinear()
                         .domain([0, 100])
-                        .range(["#000000", "#00ff00"]); // Specify the color range
+                        .range(["#ffffff", "#000000"]); // Specify the color range
+    
 
     return colorScale(inPercent[subselect]).toString()
 }
 
+
+function addColorScale() {
+        const scale = d3.scaleLinear()
+                        .domain([0, 100])
+                        .range(["#ffffff", "#000000"]);
+        const rectWidth = 8;
+        const rectHeight = 50;
+    
+        for (let i = 0; i <= 100; i++){
+            svg.append("g")
+                .append("rect")
+                .attr("width", rectWidth)
+                .attr("height", rectHeight)
+                .attr("id", i)
+                .style("fill", function() {return scale(i);})
+                .attr("x", i*rectWidth)
+                .attr("y", 0);
+    
+            // Create the text element and position it in the center of the rectangle
+           
+            if (i % 25 === 0 || i === 100) {
+                svg.append("g")
+                .append("foreignObject")
+                .attr("width", 100)
+                .attr("height", rectHeight)
+                .attr("x", i*rectWidth)
+                .attr("y", rectHeight)
+                .html("<div>" + i + "%</div>");            
+            }
+    
+            
+        }
+    
+    
+
+}
+
 // Updates the map if the variables change.
 function connectDataToMap(data, map) {
-    let dataByKanton = Array.apply(null, Array(27)).map(function (x) { return getValues(); });
+    let dataByKanton = Array.apply(null, Array(27)).map(x => { return getValues(); });
 
-    data.forEach(function (d) {
-        prepareData(d, dataByKanton);
-    });
+    data.forEach(function(d) { prepareData(d, dataByKanton); });
 
     prepareMapData(map, dataByKanton);
 }
@@ -117,7 +158,7 @@ function prepareData(dataVar, dataByKanton) {
     let id = dataVar["aes_canton"];
     let vars = ["t0sex", "t0immig", "t0fmedu_comp", "aes_langreg", "t0hisei08_3q", "t0wlem_3q", "t0st_nprog_req3", "t1educ_class_1_r", "t2educ_class_1_r", "t3educ_class_1_r"];
 
-    vars.forEach(function(i){
+    vars.forEach(function(i) {
         if (dataByKanton[id][i].hasOwnProperty(dataVar[i])) {
             dataByKanton[id][i][dataVar[i]] += 1;
         } else {
@@ -129,22 +170,14 @@ function prepareData(dataVar, dataByKanton) {
 }
 
 function prepareMapData(map, dataByKanton) {
-    map.features.forEach(function (d) {
+    map.features.forEach(function(d) {
         d.properties.details = dataByKanton[d.properties.KantonId];
-        //calculatePercentages(d.properties.details);
     });
 }
 
-function calculatePercentages(d){
-    d.t0sex.percent_female = (100/(d.t0sex.Female + d.t0sex.Male))*d.t0sex.Female;
-    d.t0sex.percent_male = (100/(d.t0sex.Female + d.t0sex.Male))*d.t0sex.Male;
-    d.t0immig.percent_native = (100/(d.t0immig["Native (at least 1 parent born in Switzerland)"] + d.t0immig["Second generation (respondent born in Switzerland, no parent born in Switzerland)"] + d.t0immig["First generation (respondent and parent(s) born abroad)"]))*d.t0immig["Native (at least 1 parent born in Switzerland)"];
-       // d.properties.details.t0sex.percent_male = (100/(d.properties.details.t0sex.Female + d.properties.details.t0sex.Male))*d.properties.details.t0sex.Male;
-}
-
-function percent(detail) {
+function percentage(detail) {
     let max = 0;
-    let result = structuredClone(detail);
+    let result = structuredClone(detail); // so it doesnt't overwrite the actual data
 
     for (let key in result) { 
         max += result[key];
@@ -152,7 +185,6 @@ function percent(detail) {
 
     for (let key in result) { 
         result[key] = ((100/max)*result[key]).toFixed(2);
-
     }
 
     return result;
@@ -164,7 +196,7 @@ function createLabel(mapData) {
     let details = mapData.properties.details[select];
 
     for (let key in details) {
-        label += "<p><b>" + key + ":</b> " + details[key] + " (" + percent(details)[key] + "%)</p>";
+        label += "<p><b>" + key + ":</b> " + details[key] + " (" + percentage(details)[key] + "%)</p>";
     }
     
     return label;    

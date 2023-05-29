@@ -1,5 +1,4 @@
 .body {
-  overflow: scroll; 
 }
 
 .map-card {
@@ -44,7 +43,41 @@
   color: lightgray;
 }
 
-.small {
+.radio-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.form-check-input {
+  margin-right: 5px;
+}
+
+.label {
+  margin-bottom: 0;
+}
+
+.button-item {
+  margin-bottom: 5px;
+}
+
+.button-item button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  border: none;
+  cursor: pointer;
+}
+
+.button-item button:hover {
+  background-color: #e0e0e0;
+}
+
+.button-item button:focus {
+  outline: none;
+}
+
+.small-text {
   font-size: 14px;
 }
 
