@@ -26,7 +26,7 @@ d3.queue()
       if (error) {
         console.error("Somthing went wrong: " + error);
       } else {
-        addChecks(labels);
+        addChecks(labels);    
         drawMap(map, data);
       }
   }

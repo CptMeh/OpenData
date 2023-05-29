@@ -1,58 +1,12 @@
-let select;
-let text;
-
+let select, subselect, text;
+let cantons, path;
 // Renders the map and can then add the TREE-Data to it.
-
-function createColorArray(d, select){
-    const colorArray = [];
-    switch (select) {
-        case "t0sex" :
-            for (let i = 0; i < d.length; i++) {
-                const variable = d[i].properties.details.t0sex.Male;
-                colorArray.push(variable);
-            }
-        case "t0immig" :
-            for (let i = 0; i < d.length; i++) {
-                const variable = d[i].properties.details.t0immig["Native (at least 1 parent born in Switzerland)"];
-                colorArray.push(variable);
-            }
-        case "t0fmedu_comp" :
-            for (let i = 0; i < d.length; i++) {
-                const variable = d[i].properties.details.t0fmedu_comp["Upper secondary education"];
-                colorArray.push(variable);
-            }
-    }
-    return colorArray;
-}
-
-function transformValuesToColors(colorArray, d, select) {
-
-    // Define the color scale
-  const colorScale = d3.scaleLinear()
-    .domain([Math.min(...colorArray), Math.max(...colorArray)])
-    .range(["#00ff00", "#0000ff"]); // Specify the color range
-   // console.log("colorArrayMin" + Math.max(...colorArray));
-   // console.log(colorArray);
-    let value = 0;
-
-    switch (select) {
-        case "t0sex" : value = d.properties.details.t0sex.Male; break;
-        case "t0immig" : value = d.properties.details.t0immig.percent_native; break;
-        case "t0fmedu_comp" : value = d.properties.details.t0fmedu_comp["Upper secondary education"]; break;
-    }
-
-  // Create an object with kantons and their corresponding colors
-    const color = colorScale(value);
-
-  return color.toString()
-}
-
 function drawMap(map, data) {
     let projection = d3.geoIdentity().reflectY(true).fitSize([width*0.9, height*0.9], map);// The projection determines what kind of plane the map itself is projected on to (eg. onto a globe or a flat plain).
-    let path = d3.geoPath().projection(projection); // Create the path for the projection
+    path = d3.geoPath().projection(projection); // Create the path for the projection
     
-
-    updateMap(data, map); // Prepare the data that should be rendered (decided by user via selection panel)
+    setSelected("t0sex", "Female");
+    connectDataToMap(data, map); // Prepare the data that should be rendered
 
     let tooltip = d3.select("#map")
                     .append("div")
@@ -74,13 +28,13 @@ function drawMap(map, data) {
     let clicked = false;
     let mouseclick = function(d) {
         // Adds the text to the tooltip and updates the position on where the mouse is.
-        tooltip.html(createLabel(d, select))
+        tooltip.html(createLabel(d))
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY) + "px");
       
         if (current === this && clicked) {
-            tooltip.style("opacity", 0.0) // make tooltip visible
-                    .style("z-index", "0"); // make it go behind the cantons, so it doesn't block them
+            tooltip.style("opacity", 0.0) // makes tooltip visible
+                    .style("z-index", "0"); // makes it go behind the cantons, so it doesn't block them
             clicked = false;
         } else {
             tooltip.style("opacity", 0.9)
@@ -109,24 +63,33 @@ function drawMap(map, data) {
         .data(map.features)
         .enter()
         .append("path")
-            .attr("class", "canton")
-            .attr("id", function(d) { return d.properties.KantonId; })
-            .attr("d", path)
-            .style("fill", function (d) {
-                console.log(d);
-                let input = map.features;
-                let colorArray = createColorArray(input, select);
-                    return transformValuesToColors(colorArray, d, select) })
-            .style("stroke", "white") // Set the color of the Kanton Borders
-            .style("stroke-width", 0.5) // Thickness of the borderlines
-            .style("z-index", "1")
+        .attr("class", "canton")
+        .attr("id", function(d) { return d.properties.KantonId; })
+        .attr("d", path)
         .on("mouseover", mouseover)
         .on("click", mouseclick)
         .on("mouseleave", mouseleave);
+
+    colorMap();
+}
+
+function colorMap() {
+    d3.selectAll("path").style("fill", function (d) { return createColorArray(d)});
+}
+
+function createColorArray(d){
+    const inPercent = percent(d.properties.details[select]);
+
+    // Define the color scale
+    const colorScale = d3.scaleLinear()
+                        .domain([0, 100])
+                        .range(["#000000", "#00ff00"]); // Specify the color range
+
+    return colorScale(inPercent[subselect]).toString()
 }
 
 // Updates the map if the variables change.
-function updateMap(data, map) {
+function connectDataToMap(data, map) {
     let dataByKanton = Array.apply(null, Array(27)).map(function (x) { return getValues(); });
 
     data.forEach(function (d) {
@@ -152,8 +115,7 @@ function getValues() {
 
 function prepareData(dataVar, dataByKanton) {
     let id = dataVar["aes_canton"];
-    let vars = ["t0sex", "t0immig", "t0fmedu_comp", "aes_langreg", "t0hisei08_3q", "t0wlem_3q", "t0st_nprog_req3"];
-    let wheightet = ["t1educ_class_1_r", "t2educ_class_1_r", "t3educ_class_1_r"];
+    let vars = ["t0sex", "t0immig", "t0fmedu_comp", "aes_langreg", "t0hisei08_3q", "t0wlem_3q", "t0st_nprog_req3", "t1educ_class_1_r", "t2educ_class_1_r", "t3educ_class_1_r"];
 
     vars.forEach(function(i){
         if (dataByKanton[id][i].hasOwnProperty(dataVar[i])) {
@@ -163,22 +125,13 @@ function prepareData(dataVar, dataByKanton) {
         }
     });
 
-    wheightet.forEach(function(i){
-        if (dataByKanton[id][i].hasOwnProperty(dataVar[i])) {
-            switch (i) {
-                case "t1educ_class_1_r" : dataByKanton[id]["t1educ_class_1_r"][dataVar[i]] += 1 * dataVar["t1wt"]; break;
-                case "t2educ_class_1_r" : dataByKanton[id]["t1educ_class_1_r"][dataVar[i]] += 1 * dataVar["t2wt"]; break;
-                case "t3educ_class_1_r" : dataByKanton[id]["t1educ_class_1_r"][dataVar[i]] += 1 * dataVar["t3wt"]; break;
-                                                           // Temp. all to t1
-            }
-        } 
-    });
+
 }
 
 function prepareMapData(map, dataByKanton) {
     map.features.forEach(function (d) {
         d.properties.details = dataByKanton[d.properties.KantonId];
-        calculatePercentages(d.properties.details);
+        //calculatePercentages(d.properties.details);
     });
 }
 
@@ -189,18 +142,35 @@ function calculatePercentages(d){
        // d.properties.details.t0sex.percent_male = (100/(d.properties.details.t0sex.Female + d.properties.details.t0sex.Male))*d.properties.details.t0sex.Male;
 }
 
+function percent(detail) {
+    let max = 0;
+    let result = structuredClone(detail);
 
-function createLabel(mapData, select) {
+    for (let key in result) { 
+        max += result[key];
+    }
+
+    for (let key in result) { 
+        result[key] = ((100/max)*result[key]).toFixed(2);
+
+    }
+
+    return result;
+}
+
+
+function createLabel(mapData) {
     let label = "<p><b>" + mapData.properties.KantonName_de + " (" + mapData.properties.alternateName + ")</b></p>";
     let details = mapData.properties.details[select];
 
     for (let key in details) {
-        label += "<p><b>" + key + ":</b> " + details[key] + "</p>";
+        label += "<p><b>" + key + ":</b> " + details[key] + " (" + percent(details)[key] + "%)</p>";
     }
     
     return label;    
 }
 
-function setSelect(newSelect) {
+function setSelected(newSelect, newSubSelected) {
     select = newSelect;
+    subselect = newSubSelected;
 }
