@@ -47,7 +47,7 @@ function drawMap(map, data) {
     let mouseover = function(d)  {
         // Highlight selected part
         d3.select(this) 
-        .style("stroke", "white")
+        .style("stroke", "gray")
         .style("stroke-width", 2)
         .style("cursor", "pointer");    // maybe use .classed("canton-highligted", true); ?       
     };
@@ -55,7 +55,7 @@ function drawMap(map, data) {
     let mouseleave = function(d) {
         // De-highlight once cursor leaves by changing back the style of the Kanton
         d3.select(this)
-            .style("stroke", "white")
+            .style("stroke", "gray")
             .style("stroke-width", 0.5);   
     };
 
@@ -77,7 +77,7 @@ function drawMap(map, data) {
 function colorMap() {
     d3.selectAll("path")
         .style("fill", function(d) { return createColorArray(d)})
-        .style("stroke", "white")
+        .style("stroke", "gray")
         .style("stroke-width", 0.5);;
 
 }
