@@ -18,7 +18,7 @@ function addButtonChecks(labels, weighted_labels) {
     const buttons = varcheck.append("div");
     const radioBox = varcheck.append("div")
       .attr("id", "radio-box")
-      .attr("class", "card p-2 mb-2");
+      .attr("class", "card p-2 mb-2 border-0");
 
     const buttonItems2 = buttons.selectAll(".button-item2")
       .data(weighted_labels)
