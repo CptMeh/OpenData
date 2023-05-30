@@ -156,9 +156,18 @@ function getValues() {
 
 function prepareData(dataVar, dataByKanton) {
     let id = dataVar["aes_canton"];
-    let vars = ["t0sex", "t0immig", "t0fmedu_comp", "aes_langreg", "t0hisei08_3q", "t0wlem_3q", "t0st_nprog_req3", "t1educ_class_1_r", "t2educ_class_1_r", "t3educ_class_1_r"];
+    let vars = ["t0sex", "t0immig", "t0fmedu_comp", "aes_langreg", "t0hisei08_3q", "t0wlem_3q", "t0st_nprog_req3"];
+    let weighted_vars = ["t1educ_class_1_r", "t2educ_class_1_r", "t3educ_class_1_r"];
+    let weights = ["t1wt", "t2wt", "t3wt"];
 
     vars.forEach(function(i) {
+        if (dataByKanton[id][i].hasOwnProperty(dataVar[i])) {
+            dataByKanton[id][i][dataVar[i]] += 1;
+        } else {
+            dataByKanton[id][i].other += 1;
+        }
+    });
+    weighted_vars.forEach(function(i) {
         if (dataByKanton[id][i].hasOwnProperty(dataVar[i])) {
             dataByKanton[id][i][dataVar[i]] += 1;
         } else {

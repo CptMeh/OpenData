@@ -21,13 +21,17 @@ d3.queue()
 
   // Geting the labels for the TREE-Data
   .defer(d3.csv, "https://raw.githubusercontent.com/CptMeh/OpenData/ramon/D3.js_implementation/Daten/labels.csv")
+
+
+  .defer(d3.csv, "https://raw.githubusercontent.com/CptMeh/OpenData/ramon/D3.js_implementation/Daten/labels_weighted.csv")
+
   // Wait till all the data is ready
-  .await(function (error, map, data, labels) {
+  .await(function (error, map, data, labels, labels_weighted) {
       if (error) {
         console.error("Somthing went wrong: " + error);
       } else {
         //addDropDownChecks(labels); 
-        addButtonChecks(labels);
+        addButtonChecks(labels, labels_weighted);
         //addButtonChecks2(labels);
         drawMap(map, data);
       }
