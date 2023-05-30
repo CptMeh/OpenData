@@ -167,12 +167,16 @@ function prepareData(dataVar, dataByKanton) {
             dataByKanton[id][i].other += 1;
         }
     });
+    let j = 0;
     weighted_vars.forEach(function(i) {
+        console.log("j = " + j);
         if (dataByKanton[id][i].hasOwnProperty(dataVar[i])) {
-            dataByKanton[id][i][dataVar[i]] += 1;
+            dataByKanton[id][i][dataVar[i]] += parseFloat(dataVar[weights[j]]);
         } else {
-            dataByKanton[id][i].other += 1;
+            dataByKanton[id][i].other += parseFloat(dataVar[weights[j]]);
         }
+        j++;
+        console.log(dataVar[weights[j-1]].type);
     });
 
 
@@ -186,7 +190,7 @@ function prepareMapData(map, dataByKanton) {
 
 function percentage(detail) {
     let max = 0;
-    let result = structuredClone(detail); // so it doesnt't overwrite the actual data
+    let result = structuredClone(detail); // so it doesn't overwrite the actual data
 
     for (let key in result) { 
         max += result[key];

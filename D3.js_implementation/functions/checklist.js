@@ -16,7 +16,6 @@ const data = [
   
 function addButtonChecks(labels, weighted_labels) {
     const buttons = varcheck.append("div");
-    const buttons_weighted = varcheck.append("div");
     const radioBox = varcheck.append("div")
       .attr("id", "radio-box")
       .attr("class", "card p-4 mb-3");
@@ -34,8 +33,10 @@ function addButtonChecks(labels, weighted_labels) {
         setRadios(weighted_data[i], radioBox);
       });
 
+    buttons.append("br");
+
     buttons.append("h4")
-        .text("Über die Teilnehmenden");
+        .text("Über die Teilnehmer:");
   
     const buttonItems = buttons.selectAll(".button-item")
       .data(labels)
