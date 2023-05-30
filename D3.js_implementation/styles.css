@@ -58,15 +58,16 @@
 }
 
 .button-item {
-  margin-bottom: 5px;
+  margin-bottom: 3px;
 }
 
 .button-item button {
-  padding: 10px 20px;
+  padding: 3px 3px;
   border-radius: 5px;
   background-color: #f0f0f0;
   border: none;
   cursor: pointer;
+  font-size: 12px;
 }
 
 .button-item button:hover {
@@ -74,6 +75,26 @@
 }
 
 .button-item button:focus {
+  outline: none;
+}
+
+.button-item2 {
+  margin-bottom: 5px;
+}
+
+.button-item2 button {
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  border: none;
+  cursor: pointer;
+}
+
+.button-item2 button:hover {
+  background-color: #e0e0e0;
+}
+
+.button-item2 button:focus {
   outline: none;
 }
 
@@ -94,7 +115,7 @@
   padding: "5px";
   opacity: 0;
   position: absolute;
-  overflow: scroll; 
+  overflow: scroll;
 }
 
 .canton {

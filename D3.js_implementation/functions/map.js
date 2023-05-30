@@ -5,7 +5,7 @@ function drawMap(map, data) {
     let projection = d3.geoIdentity().reflectY(true).fitSize([width*0.9, height*0.9], map);// The projection determines what kind of plane the map itself is projected on to (eg. onto a globe or a flat plain).
     let path = d3.geoPath().projection(projection); // Create the path for the projection
     
-    setSelected("t0sex", "Female");
+    setSelected("t1educ_class_1_r", "NET");
     connectDataToMap(data, map); // Prepare the data that should be rendered
 
     let tooltip = d3.select("#map")
@@ -88,7 +88,7 @@ function createColorArray(d){
     // Define the color scale
     const colorScale = d3.scaleLinear()
                         .domain([0, 100])
-                        .range(["#ffffff", "#000000"]); // Specify the color range
+                        .range(["#ffffff", "#030303"]); // Specify the color range
     
 
     return colorScale(inPercent[subselect]).toString()
@@ -98,7 +98,7 @@ function createColorArray(d){
 function addColorScale() {
         const scale = d3.scaleLinear()
                         .domain([0, 100])
-                        .range(["#ffffff", "#000000"]);
+                        .range(["#ffffff", "#030304"]);
         const rectWidth = 8;
         const rectHeight = 50;
     
@@ -166,17 +166,16 @@ function prepareData(dataVar, dataByKanton) {
         } else {
             dataByKanton[id][i].other += 1;
         }
+       // console.log(dataVar[id][i]);
     });
     let j = 0;
     weighted_vars.forEach(function(i) {
-        console.log("j = " + j);
         if (dataByKanton[id][i].hasOwnProperty(dataVar[i])) {
             dataByKanton[id][i][dataVar[i]] += parseFloat(dataVar[weights[j]]);
         } else {
             dataByKanton[id][i].other += parseFloat(dataVar[weights[j]]);
         }
         j++;
-        console.log(dataVar[weights[j-1]].type);
     });
 
 
@@ -209,7 +208,7 @@ function createLabel(mapData) {
     let details = mapData.properties.details[select];
 
     for (let key in details) {
-        label += "<p><b>" + key + ":</b> " + details[key] + " (" + percentage(details)[key] + "%)</p>";
+        label += "<p><b>" + key + ":</b> " + details[key].toFixed(0) + " (" + percentage(details)[key] + "%)</p>";
     }
     
     return label;    

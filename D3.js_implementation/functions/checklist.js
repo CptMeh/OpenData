@@ -13,31 +13,34 @@ const data = [
   ["t0wlem_3q", "Low", "Medium", "High"],
   ["t0st_nprog_req3", "High requirements", "Advanced requirements & Alternative/non-assignable study programme", "Basic/low requirements"]
 ];
-  
+
 function addButtonChecks(labels, weighted_labels) {
     const buttons = varcheck.append("div");
     const radioBox = varcheck.append("div")
       .attr("id", "radio-box")
-      .attr("class", "card p-4 mb-3");
+      .attr("class", "card p-2 mb-2");
 
-    const buttonItems2 = buttons.selectAll(".button-item")
+    const buttonItems2 = buttons.selectAll(".button-item2")
       .data(weighted_labels)
       .enter()
       .append("div")
-      .attr("class", "button-item");
+      .attr("class", "button-item2");
 
     buttonItems2.append("button")
       .attr("id", d => d.label)
       .text(d => d.name)
       .on("click", (d, i) => {
+          if(select==d.name){
+              console.log("got here");
+          };
         setRadios(weighted_data[i], radioBox);
       });
 
-    buttons.append("br");
+    buttons.append(() => radioBox.node());
 
-    buttons.append("h4")
+    buttons.append("h5")
         .text("Über die Teilnehmer:");
-  
+
     const buttonItems = buttons.selectAll(".button-item")
       .data(labels)
       .enter()
@@ -50,10 +53,8 @@ function addButtonChecks(labels, weighted_labels) {
       .on("click", (d, i) => {
         setRadios(data[i], radioBox);
       });
-  
     buttons.append("br");
     setRadios(weighted_data[0], radioBox);
-    setRadios(data[0], radioBox);
   }
   
 
