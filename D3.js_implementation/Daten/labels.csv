@@ -1,0 +1,9 @@
+label,name
+t0sex,Gender
+t0immig,Immigration status
+t0fmedu_comp,Parents' highest educational attainment
+aes_langreg,Language region
+t0hisei08_3q,Parental socioeconomic status level
+t0wlem_3q,Math score level
+t0st_nprog_req3,National school programme (requirements)
+t1educ_class_1_r,Educational status
