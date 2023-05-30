@@ -1,7 +1,4 @@
 label,name
-t1educ_class_1_r,Educational status (Wave 1)
-t2educ_class_1_r,Educational status (Wave 2)
-t3educ_class_1_r,Educational status (Wave 3)
 t0sex,Gender
 t0immig,Immigration status
 t0fmedu_comp,Parents' highest educational attainment

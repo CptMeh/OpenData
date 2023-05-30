@@ -27,7 +27,8 @@ d3.queue()
         console.error("Somthing went wrong: " + error);
       } else {
         //addDropDownChecks(labels); 
-        addButtonChecks(labels);   
+        addButtonChecks(labels);
+        //addButtonChecks2(labels);
         drawMap(map, data);
       }
   }
