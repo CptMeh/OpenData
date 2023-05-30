@@ -15,47 +15,62 @@ const data = [
 ];
 
 function addButtonChecks(labels, weighted_labels) {
-    const buttons = varcheck.append("div");
-    const radioBox = varcheck.append("div")
-      .attr("id", "radio-box")
-      .attr("class", "card p-2 mb-2 border-0");
+  const buttons = varcheck.append("div");
+  const radioBox = varcheck.append("div")
+    .attr("id", "radio-box")
+    .attr("class", "card p-2 mb-2 border-0");
 
-    const buttonItems2 = buttons.selectAll(".button-item2")
-      .data(weighted_labels)
-      .enter()
-      .append("div")
-      .attr("class", "button-item2");
+  const buttonItems2 = buttons.selectAll(".button-item2")
+    .data(weighted_labels)
+    .enter()
+    .append("div")
+    .attr("class", "button-item2");
 
-    buttonItems2.append("button")
-      .attr("id", d => d.label)
-      .text(d => d.name)
-      .on("click", (d, i) => {
-          if(select==d.name){
-              console.log("got here");
-          };
-        setRadios(weighted_data[i], radioBox);
-      });
+  buttonItems2.append("button")
+    .attr("id", d => d.label)
+    .text(d => d.name)
+    .on("click", function(d, i) {
+      d3.selectAll(".button-item2 button")
+        .classed("active", false);
+      d3.selectAll(".button-item button")
+          .classed("active", false);
 
-    buttons.append(() => radioBox.node());
+      d3.select(this)
+        .classed("active", true);
 
-    buttons.append("h5")
-        .text("Über die Teilnehmer:");
+      setRadios(weighted_data[i], radioBox);
+    });
 
-    const buttonItems = buttons.selectAll(".button-item")
-      .data(labels)
-      .enter()
-      .append("div")
-      .attr("class", "button-item");
-  
-    buttonItems.append("button")
-      .attr("id", d => d.label)
-      .text(d => d.name)
-      .on("click", (d, i) => {
-        setRadios(data[i], radioBox);
-      });
-    buttons.append("br");
-    setRadios(weighted_data[0], radioBox);
-  }
+  buttons.append(() => radioBox.node());
+
+  buttons.append("h5")
+    .text("Über die Teilnehmer:");
+
+  const buttonItems = buttons.selectAll(".button-item")
+    .data(labels)
+    .enter()
+    .append("div")
+    .attr("class", "button-item");
+
+  buttonItems.append("button")
+    .attr("id", d => d.label)
+    .text(d => d.name)
+    .on("click", function(d, i) {
+      d3.selectAll(".button-item2 button")
+        .classed("active", false);
+      d3.selectAll(".button-item button")
+        .classed("active", false);
+
+      d3.select(this)
+        .classed("active", true);
+
+      setRadios(data[i], radioBox);
+    });
+
+  buttons.append("br");
+  setRadios(weighted_data[0], radioBox);
+}
+
   
 
 function setRadios(values, radioBox) {
