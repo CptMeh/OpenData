@@ -6,4 +6,6 @@ aes_langreg,Language region
 t0hisei08_3q,Parental socioeconomic status level
 t0wlem_3q,Math score level
 t0st_nprog_req3,National school programme (requirements)
-t1educ_class_1_r,Educational status
+t1educ_class_1_r,Educational status (Wave 1)
+t2educ_class_1_r,Educational status (Wave 2)
+t3educ_class_1_r,Educational status (Wave 3)
