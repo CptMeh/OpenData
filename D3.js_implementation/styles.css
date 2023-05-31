@@ -79,13 +79,11 @@
 }
 
 .button-item button.active {
-    background-color: #bcbcbd; /* set the desired background color for the active button */
-    /* additional styles for the active button */
+    background-color: #bcbcbd; 
   }
 
 .button-item2 button.active {
-    background-color: #bbbbbd; /* set the desired background color for the active button */
-    /* additional styles for the active button */
+    background-color: #bbbbbd;
   }
 
 .button-item2 {
