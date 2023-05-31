@@ -166,7 +166,6 @@ function prepareData(dataVar, dataByKanton) {
         } else {
             dataByKanton[id][i].other += 1;
         }
-       // console.log(dataVar[id][i]);
     });
     let j = 0;
     weighted_vars.forEach(function(i) {
@@ -208,7 +207,7 @@ function createLabel(mapData) {
     let details = mapData.properties.details[select];
 
     for (let key in details) {
-        label += "<p><b>" + key + ":</b> " + details[key].toFixed(0) + " (" + percentage(details)[key] + "%)</p>";
+        label += "<p><b>" + key + ":</b> " + percentage(details)[key] + "% (" + details[key].toFixed(0) + ")</p>";
     }
     
     return label;    
